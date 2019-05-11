@@ -1,0 +1,54 @@
+{
+    "name": "photographer-portfolio",
+    "version": "1.0.0",
+    "description": "",
+    "main": "src/server/index.ts",
+    "scripts": {
+        "build-client:prod": "webpack --config src/client/webpack.config.js --mode production",
+        "build-client": "webpack --config src/client/webpack.config.js --mode development --progress",
+        "build-server": "cd src/server/ && tsc && ef-tspm && cd ../../",
+        "build:prod": "npm run clean && npm run build-server && npm run build-client:prod",
+        "build": "npm run clean && npm run build-server && npm run build-client",
+        "clean": "rm -rf dist build",
+        "dev": "npm-run-all --parallel watch:client watch:server",
+        "heroku-postbuild": "npm run build:prod",
+        "watch:client": "webpack --config src/client/webpack.config.js --watch --mode development --progress",
+        "watch:server": "nodemon",
+        "start": "node build/index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/akrava/photographer-portfolio.git"
+    },
+    "author": "Arkadiy Krava",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/akrava/photographer-portfolio/issues"
+    },
+    "homepage": "https://github.com/akrava/photographer-portfolio#readme",
+    "devDependencies": {
+        "@ef-carbon/tspm": "^2.2.5",
+        "@types/autoprefixer": "^9.5.0",
+        "@types/express": "^4.16.1",
+        "@types/react": "^16.8.17",
+        "@types/react-dom": "^16.8.4",
+        "autoprefixer": "^9.5.1",
+        "awesome-typescript-loader": "^5.2.1",
+        "css-loader": "^2.1.1",
+        "html-loader": "^0.5.5",
+        "html-webpack-plugin": "^3.2.0",
+        "mini-css-extract-plugin": "^0.6.0",
+        "nodemon": "^1.19.0",
+        "npm-run-all": "^4.1.5",
+        "postcss-loader": "^3.0.0",
+        "react": "^16.8.6",
+        "react-dom": "^16.8.6",
+        "sass-loader": "^7.1.0",
+        "typescript": "^3.4.5",
+        "webpack": "^4.31.0",
+        "webpack-cli": "^3.3.2"
+    },
+    "dependencies": {
+        "express": "^4.16.4"
+    }
+}
