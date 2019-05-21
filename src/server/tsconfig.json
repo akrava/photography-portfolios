@@ -7,15 +7,15 @@
             "@models/*":  [ "models/*"    ],
             "@modules/*": [ "modules/*"   ],
             "@configs/*": [ "configs/*"   ],
-            "@app/*":     [ "./*"         ],
+            "@app/*":     [ "./*"         ]
         },
         "outDir":                     "./../../build",
         "target":                     "esnext",
-        "lib":                        [ "esnext" ],
+        "lib":                        [ "esnext", "dom" ],
         "module":                     "commonjs",
         "moduleResolution":           "node",
         "esModuleInterop":            true,
-        "sourceMap":                  false,
+        "sourceMap":                  true,
         "declaration":                false,
         "declarationMap":             false,
         "experimentalDecorators":     true,
@@ -25,9 +25,8 @@
         "noImplicitAny":              true,
         "noImplicitThis":             true,
         "noImplicitReturns":          true,
-        "noFallthroughCasesInSwitch": true,
+        "noFallthroughCasesInSwitch": true
     },
     "files":   [ "index.ts" ],
     "include": [ "**/*" ],
-    "exclude": [ "./../../node_modules/**/*", "./../../build**/*" ]
 }

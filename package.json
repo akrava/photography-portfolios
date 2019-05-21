@@ -1,5 +1,5 @@
 {
-    "name": "photographer-portfolio",
+    "name": "photography-portfolios",
     "version": "1.0.0",
     "description": "",
     "main": "src/server/index.ts",
@@ -18,37 +18,65 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/akrava/photographer-portfolio.git"
+        "url": "git+https://github.com/akrava/photography-portfolios.git"
     },
     "author": "Arkadiy Krava",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/akrava/photographer-portfolio/issues"
+        "url": "https://github.com/akrava/photography-portfolios/issues"
     },
-    "homepage": "https://github.com/akrava/photographer-portfolio#readme",
+    "homepage": "https://github.com/akrava/photography-portfolios#readme",
     "devDependencies": {
         "@ef-carbon/tspm": "^2.2.5",
+        "@material-ui/core": "^3.9.3",
         "@types/autoprefixer": "^9.5.0",
+        "@types/classnames": "^2.2.7",
+        "@types/dotenv": "^6.1.1",
         "@types/express": "^4.16.1",
+        "@types/node-sass": "^4.11.0",
         "@types/react": "^16.8.17",
         "@types/react-dom": "^16.8.4",
+        "@types/react-redux": "^7.0.9",
+        "@types/react-router-dom": "^4.3.3",
+        "@types/redux": "^3.6.0",
+        "@types/redux-devtools-extension": "^2.13.2",
+        "@types/redux-thunk": "^2.1.0",
+        "@types/stylelint": "^9.10.0",
         "autoprefixer": "^9.5.1",
         "awesome-typescript-loader": "^5.2.1",
+        "classnames": "^2.2.6",
         "css-loader": "^2.1.1",
         "html-loader": "^0.5.5",
         "html-webpack-plugin": "^3.2.0",
         "mini-css-extract-plugin": "^0.6.0",
+        "node-sass": "^4.12.0",
         "nodemon": "^1.19.0",
+        "notistack": "^0.8.4",
         "npm-run-all": "^4.1.5",
         "postcss-loader": "^3.0.0",
+        "postcss-preset-env": "^6.6.0",
         "react": "^16.8.6",
         "react-dom": "^16.8.6",
+        "react-redux": "^7.0.3",
+        "react-router-breadcrumbs-hoc": "^3.2.0",
+        "react-router-dom": "^5.0.0",
+        "redux": "^4.0.1",
+        "redux-devtools-extension": "^2.13.8",
+        "redux-thunk": "^2.3.0",
         "sass-loader": "^7.1.0",
+        "source-map-loader": "^0.2.4",
+        "stylelint": "^10.0.1",
+        "stylelint-config-sass-guidelines": "^6.0.0",
+        "stylelint-config-standard": "^18.3.0",
+        "stylelint-scss": "^3.6.1",
+        "tslint": "^5.16.0",
+        "tslint-react": "^4.0.0",
         "typescript": "^3.4.5",
-        "webpack": "^4.31.0",
+        "webpack": "^4.32.0",
         "webpack-cli": "^3.3.2"
     },
     "dependencies": {
-        "express": "^4.16.4"
+        "dotenv": "^8.0.0",
+        "express": "^4.17.0"
     }
 }

@@ -1,6 +1,8 @@
 const Path                 = require("path");
 const HtmlWebPackPlugin    = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const PostcssPresetEnv     = require("postcss-preset-env");
+const Autoprefixer         = require("autoprefixer");
 const TsconfigRelativePath = "tsconfig.json";
 
 module.exports = {
@@ -18,11 +20,10 @@ module.exports = {
         alias: { 
             "@app":        relativePath("."),
             "@components": relativePath("components"),
-            "@reducers":   relativePath("reducers"  ),
-            "@actions":    relativePath("actions"   ),
-            "@theme":      relativePath("theme"     ),
-            "@configs":    relativePath("configs"   ),
-            "@services":   relativePath("services"  )
+            "@reducers":   relativePath("reducers"),
+            "@actions":    relativePath("actions"),
+            "@configs":    relativePath("configs"),
+            "@route":      relativePath("components/route")
         }
     },
     module: {
@@ -58,9 +59,11 @@ module.exports = {
                     {
                         loader: 'postcss-loader',
                         options: {
-                            plugins: function () {
-                                return [ require('autoprefixer') ];
-                            }
+                            ident: 'postcss',
+                            plugins: () => [
+                                PostcssPresetEnv(),
+                                Autoprefixer()
+                            ]
                         }
                     }, 
                     {

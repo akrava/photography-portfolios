@@ -1,0 +1,18 @@
+@import "styles/header";
+
+html, body {
+    font-size: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+.link {
+    text-decoration: none;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.button-plain__wrapper {
+    height: inherit;
+}
