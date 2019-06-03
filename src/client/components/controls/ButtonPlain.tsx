@@ -1,7 +1,7 @@
-import * as React from "react";
+import React from "react";
 import { Button } from "@material-ui/core";
 import { WithStyles, withStyles, createStyles } from "@material-ui/core/styles";
-import * as classNames from "classnames";
+import classNames from "classnames";
 
 const styles = () => createStyles({
     root: {

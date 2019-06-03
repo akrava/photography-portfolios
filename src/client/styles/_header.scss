@@ -62,8 +62,7 @@
     display: none;
 }
 
-.menu__item:focus-within .link__text, .menu__item:hover .link__text {
-    text-decoration: none;
+.menu__item:focus-within .link__text > div, .menu__item:hover .link__text > div {
     background-color: rgba(0, 0, 0, 0.08);
 }
 

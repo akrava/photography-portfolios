@@ -63,4 +63,5 @@ typings/
 #other
 build/
 dist/
-.vscode
+.vscode/
+.awcache/

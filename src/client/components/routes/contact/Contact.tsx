@@ -1,15 +1,43 @@
-import * as React from "react";
+import React from "react";
 //import Typography from "@material-ui/core/Typography";
 import { Link } from "react-router-dom";
 
-class About extends React.Component {
+class Contact extends React.Component {
+    state = {
+        temp: 3
+    };
+
+    fetchForecast = async () => {
+        let response, respBody;
+        try {
+            response = await fetch(`https://cors-anywhere.herokuapp.com/www.metaweather.com/api/location/924938/`, { method: "GET"});
+            if (!response.ok) throw new Error(response.statusText);
+            respBody = await response.json();
+        } catch (e) {
+            console.log(e);
+        }
+        return respBody;
+    }
+
+    componentDidMount() {
+        this.fetchForecast()
+        .then(data => {
+            if (data && data.consolidated_weather) {
+                this.setState({
+                    temp: data.consolidated_weather,
+                });
+            }
+        }).catch(e => console.error(e));
+    }
+
     render() {
         return (
             <>
-            <p >
-                About
+            <p>
+                {JSON.stringify(this.state.temp)}
+                Contact
             </p>
-            <p >
+            <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nec tincidunt praesent semper feugiat. Venenatis a condimentum vitae sapien pellentesque. At lectus urna duis convallis. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non. Libero justo laoreet sit amet cursus. Porttitor leo a diam sollicitudin tempor id. Quis eleifend quam adipiscing vitae. Curabitur vitae nunc sed velit dignissim sodales ut. Eu tincidunt tortor aliquam nulla facilisi cras fermentum. Nulla facilisi etiam dignissim diam.
 
                 Pulvinar mattis nunc sed blandit libero. Arcu dictum varius duis at consectetur lorem donec massa. Quis lectus nulla at volutpat. Amet risus nullam eget felis eget. Faucibus in ornare quam viverra orci sagittis eu. Pellentesque elit eget gravida cum sociis natoque. Neque ornare aenean euismod elementum. Nulla posuere sollicitudin aliquam ultrices sagittis orci a. Dui nunc mattis enim ut tellus elementum. Malesuada fames ac turpis egestas maecenas pharetra convallis. Aliquet porttitor lacus luctus accumsan tortor posuere ac. Mauris nunc congue nisi vitae suscipit tellus mauris a diam. Donec et odio pellentesque diam volutpat.
@@ -40,4 +68,4 @@ class About extends React.Component {
     }
 }
 
-export default About;
+export default Contact;

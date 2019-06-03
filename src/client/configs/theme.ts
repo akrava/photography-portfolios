@@ -5,4 +5,4 @@ const palette = {
     secondary: { main: "#5E35B1", contrastText: "#ffffff" }
 };
 
-export default createMuiTheme({ palette, typography: { useNextVariants: true } });
+export default createMuiTheme({ palette });

@@ -16,27 +16,22 @@ module.exports = {
     },
     devtool: "source-map",
     resolve: {
-        extensions: [".ts", ".tsx", ".js", '.mjs', ".json"] ,
-        alias: { 
+        extensions: [ ".ts", ".tsx", ".js", '.mjs', ".json" ],
+        alias: {
             "@app":        relativePath("."),
             "@components": relativePath("components"),
             "@reducers":   relativePath("reducers"),
             "@actions":    relativePath("actions"),
             "@configs":    relativePath("configs"),
-            "@route":      relativePath("components/route")
+            "@routes":     relativePath("components/routes")
         }
     },
     module: {
         rules: [
-            { 
+            {
                 test: /\.tsx?$/, 
-                loader: `awesome-typescript-loader?configFileName=${relativePath(TsconfigRelativePath)}` 
+                loader: `awesome-typescript-loader?configFileName=${relativePath(TsconfigRelativePath)}`
             },
-            // {
-            //     type: 'javascript/auto',
-            //     test: /\.mjs$/,
-            //     use: []
-            // },
             { 
                 enforce: "pre", 
                 test: /\.js$/, 
@@ -65,7 +60,7 @@ module.exports = {
                                 Autoprefixer()
                             ]
                         }
-                    }, 
+                    },
                     {
                         loader: 'sass-loader'
                     }

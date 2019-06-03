@@ -2,24 +2,25 @@
     "compilerOptions": {
         "outDir":           "./../dist/",
         "jsx":              "react",
-        "target":           "es2015",
-        "lib":              [ "es2015", "dom" ],
+        "target":           "es6",
+        "lib":              [ "es6", "dom" ],
         "module":           "commonjs",
         "moduleResolution": "node",
         "rootDir":           "..",
         "baseUrl":           ".",
         "paths": {
-            "@reducers/*":     [ "reducers/*"         ],
-            "@actions/*":      [ "actions/*"          ],
-            "@components/*":   [ "components/*"       ],
-            "@route/*":        [ "components/route/*" ],
-            "@configs/*":      [ "configs/*"          ],
-            "@modules/*":      [ "modules/*"          ],
-            "@app/*":          [ "./*"                ]
+            "@reducers/*":     [ "reducers/*"          ],
+            "@actions/*":      [ "actions/*"           ],
+            "@components/*":   [ "components/*"        ],
+            "@routes/*":       [ "components/routes/*" ],
+            "@configs/*":      [ "configs/*"           ],
+            "@modules/*":      [ "modules/*"           ],
+            "@app/*":          [ "./*"                 ]
         },
         "noImplicitAny":              true,
         "experimentalDecorators":     true,
         "strict":                     true,
+        "esModuleInterop":            true,
         "noUnusedLocals":             true,
         "noUnusedParameters":         true,
         "noImplicitThis":             true,
@@ -28,5 +29,10 @@
         "skipLibCheck":               true,
         "checkJs":                    false
     },
-    "include": [ "./**/*" ]
+    "awesomeTypescriptLoaderOptions": {
+        "useBabel": true,
+        "babelCore": "@babel/core",
+        "useCache": true    
+    },
+    "include": [ "**/*" ]
 }

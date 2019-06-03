@@ -1,6 +1,6 @@
 {
 	"plugins": [ "stylelint-scss" ],
-	"extends": ["stylelint-config-standard", "stylelint-config-sass-guidelines"],
+	"extends": [ "stylelint-config-standard", "stylelint-config-sass-guidelines" ],
 	"rules": {
 		"at-rule-empty-line-before": null,
 		"indentation": 4,

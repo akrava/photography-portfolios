@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 
 class Menu extends React.Component {
     render() {

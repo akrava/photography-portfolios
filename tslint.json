@@ -1,5 +1,5 @@
 {
-    "extends": ["tslint:recommended", "tslint-react"],
+    "extends": [ "tslint:recommended", "tslint-react" ],
     "rules": {
         "jsx-wrap-multiline":       false,
         "trailing-comma":           false,

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { NavLink, Link } from "react-router-dom";
 import { Configs } from "@configs/general";
 import { AppBar, Toolbar } from "@material-ui/core";
@@ -6,6 +6,8 @@ import ButtonPlain from "@components/controls/ButtonPlain";
 import { WithStyles, withStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Menu from "@components/header/Menu";
 import MenuItem from "@components/header/MenuItem";
+import SubMenu from "@components/header/SubMenu";
+
 
 const styles = ({  }: Theme) => createStyles({
     root: {
@@ -48,6 +50,7 @@ class Header extends React.Component<WithStyles<typeof styles>> {
                             </NavLink>
                         </MenuItem>
                     </Menu>
+                    <SubMenu />
                 </Toolbar>
             </AppBar>
         );
