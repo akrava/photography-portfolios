@@ -1,16 +1,18 @@
 {
     "extends": [ "tslint:recommended", "tslint-react" ],
     "rules": {
-        "jsx-wrap-multiline":       false,
-        "trailing-comma":           false,
-        "member-access":            false,
-        "ordered-imports":          false,
-        "variable-name":            false,
-        "no-console":               false,
-        "no-namespace":             false,
-        "object-literal-sort-keys": false,
-        "only-arrow-functions":     false,
-        "jsx-no-multiline-js":      false,
-        "jsx-alignment":            false
+        "jsx-wrap-multiline":        false,
+        "jsx-no-lambda":             false,
+        "trailing-comma":            false,
+        "member-access":             false,
+        "ordered-imports":           false,
+        "variable-name":             false,
+        "no-console":                false,
+        "no-namespace":              false,
+        "object-literal-sort-keys":  false,
+        "only-arrow-functions":      false,
+        "jsx-no-multiline-js":       false,
+        "jsx-alignment":             false,
+        "object-literal-key-quotes": false
     }
 }

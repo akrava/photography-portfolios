@@ -1,127 +1,102 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import { WithStyles, withStyles, Theme, createStyles } from "@material-ui/core/styles";
+import StyledMenu from "@components/controls/StyledMenu";
+import StyledMenuItem from "@components/controls/StyledMenuItem";
+import ButtonPlain from "@components/controls/ButtonPlain";
+import { IMenuLink } from "@components/header/MenuItem";
+import { withRouter } from "react-router-dom";
+import { RouteComponentProps } from "react-router";
 
-const styles = ({ palette }: Theme) => createStyles({
-    paper: {
-        border: "1px solid #d3d4d5",
-    },
-    menuItem: {
-        "&:focus": {
-            backgroundColor: palette.primary.dark,
-            "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-                color: palette.common.white,
-            },
-        },
-    },
-});
-
-interface ISubMenuState {
-    anchorEl: null | HTMLElement;
-    mouseOverButton: boolean;
-    mouseOverMenu: boolean;
-    lastChange: number;
+export interface ISubMenuProps {
+    name: string;
+    menu: IMenuLink[];
 }
 
-class SubMenu extends React.Component<WithStyles<typeof styles>, ISubMenuState> {
-    timeout = 1200;
-
+class SubMenu extends React.Component<ISubMenuProps & RouteComponentProps> {
     state = {
         anchorEl: null,
-        mouseOverButton: false,
-        mouseOverMenu: false,
-        lastChange: performance.now()
+        textCurrentLink: null
     };
+
+    componentDidUpdate() {
+        this.highlitActiveSubMenuLink();
+    }
+
+    componentDidMount() {
+        this.highlitActiveSubMenuLink();
+    }
+
+    highlitActiveSubMenuLink = () => {
+        const { menu, name } = this.props;
+        const subMenuLink = document.getElementById(`sub-menu-${name}`)!.parentElement!;
+        const show = menu.some((x) => window.location.pathname === x.link);
+        subMenuLink.classList.toggle("header__link_active", show);
+    }
 
     handleClick = (event: React.MouseEvent<HTMLElement>) => {
         this.setState({ anchorEl: event.currentTarget });
+        const wrapper = event.currentTarget.parentElement!;
+        wrapper.classList.toggle("header__link_selected", true);
     }
 
     handleClose = () => {
-        this.setState({ mouseOverButton: false, mouseOverMenu: false });
+        const button: HTMLButtonElement = this.state.anchorEl!;
+        button.parentElement!.classList.toggle("header__link_selected", false);
+        this.setState({ anchorEl: null });
     }
 
-    enterButton = (event: React.MouseEvent<HTMLElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
-        this.setState({ mouseOverButton: true, anchorEl: event.currentTarget, lastChange: performance.now() });
+    handleOpenLink = (link: string) => {
+        this.handleClose();
+        this.props.history.push(link);
     }
 
-    leaveButton = (event: React.MouseEvent<HTMLElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
-        console.log(performance.now() - this.state.lastChange);
-        if (performance.now() - this.state.lastChange > this.timeout) {
-            this.setState({ mouseOverButton: false });
-        }
-    }
-
-    enterMenu = (event: React.MouseEvent<HTMLElement>) => {
-        this.setState({ mouseOverMenu: true, anchorEl: event.currentTarget, lastChange: performance.now() });
-    }
-
-    leaveMenu = () => {
-        console.log(performance.now() - this.state.lastChange);
-        if (performance.now() - this.state.lastChange > this.timeout) {
-            this.setState({ mouseOverButton: false });
-        }
+    renderSubMenuItems = () => {
+        return this.props.menu.map((x, i) => {
+            let className = "submenu__link link";
+            if (window.location.pathname === x.link) {
+                className += " submenu__link_active";
+            }
+            return (
+                <StyledMenuItem
+                    onClick={() => this.handleOpenLink(x.link!)}
+                    key={i}
+                >
+                    <ListItemText
+                        className={className}
+                        primary={x.name}
+                    />
+                </StyledMenuItem>
+            );
+        });
     }
 
     render() {
-        const { handleClick, leaveButton, handleClose, leaveMenu, enterButton, enterMenu } = this;
-        const { classes } = this.props;
+        const { name } = this.props;
         const { anchorEl } = this.state;
-        const open = this.state.mouseOverButton || this.state.mouseOverMenu;
+        const { handleClick, handleClose, renderSubMenuItems } = this;
         return (
-            <div>
-                <Button
-                    aria-owns={anchorEl ? "simple-menu" : undefined}
+            <>
+                <ButtonPlain
+                    className="header-link__text"
+                    id={`sub-menu-${name}`}
+                    aria-controls={`customized-menu-${name}`}
                     aria-haspopup="true"
-                    variant="contained"
-                    color="primary"
                     onClick={handleClick}
-                    onMouseOverCapture={enterButton}
-                    onMouseOutCapture={leaveButton}
                 >
-                    Open Menu
-                </Button>
-                <Menu
-                    elevation={0}
-                    getContentAnchorEl={null}
-                    anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "center",
-                    }}
-                    transformOrigin={{
-                        vertical: "top",
-                        horizontal: "center",
-                    }}
-                    id="simple-menu"
+                    {name}
+                </ButtonPlain>
+                <StyledMenu
+                    id={`customized-menu-${name}`}
                     anchorEl={anchorEl}
-                    open={open}
+                    keepMounted={true}
+                    open={!!anchorEl}
                     onClose={handleClose}
-                    MenuListProps={{
-                        onMouseEnter: enterMenu,
-                        onMouseLeave: leaveMenu,
-                    }}
-                    classes={{paper: classes.paper}}
                 >
-                    <MenuItem onClick={handleClose} className={classes.menuItem}>
-                        <ListItemText primary="Sent mail" />
-                    </MenuItem>
-                    <MenuItem onClick={handleClose} className={classes.menuItem}>
-                        <ListItemText primary="Drafts" />
-                    </MenuItem>
-                    <MenuItem onClick={handleClose} className={classes.menuItem}>
-                        <ListItemText primary="Inbox" />
-                    </MenuItem>
-                </Menu>
-            </div>
+                    {renderSubMenuItems()}
+                </StyledMenu>
+            </>
         );
     }
 }
 
-export default withStyles(styles)(SubMenu);
+export default withRouter(SubMenu);

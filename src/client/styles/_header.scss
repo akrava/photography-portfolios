@@ -1,7 +1,14 @@
-// header
+.header {
+    will-change: transform;
+    z-index: 1000;
+}
 
-.header__logo {
+.header-logo {
     margin-right: 1.5rem;
+
+    &__button {
+        color: #3d1aad;
+    }
 
     &__img {
         height: 50px;
@@ -9,16 +16,37 @@
     }
 }
 
-.header {
-    background-color: #aa3939;
+@mixin render-stroke($depth, $color) {
+    $shadow: ();
+    @for $i from 1 through $depth {
+        $offset: $i * 1px;
+        $shadow: append($shadow, $offset 0 1px $color, comma);
+        $shadow: append($shadow, $offset * -1 0 1px $color, comma);
+        $shadow: append($shadow, 0 $offset 1px $color, comma);
+        $shadow: append($shadow, 0 $offset * -1 1px $color, comma);
+    }
+    $shadow: append($shadow, 0 0 3px $color);
+
+    text-shadow: $shadow;
+}
+
+.header-link__text {
+    @include render-stroke(1, #fff);
+
+    color: #3d1aad;
+    font-size: 1rem;
 }
 
 .header__link {
     display: block;
     height: 100%;
 
-    &__text {
-        font-size: 1.15rem;
+    &_selected {
+        background-color: rgba(0, 0, 0, 0.08);
+    }
+
+    &_active > .header-link__text {
+        @extend .header__link_active;
     }
 }
 
@@ -26,7 +54,15 @@
     height: 100%;
 }
 
-.menu__list, .menu__dropdown {
+.submenu__link {
+    color: #000a75;
+}
+
+.header__link_active, .submenu__link_active {
+    color: #000;
+}
+
+.menu__list {
     list-style: none;
     margin: 0;
     padding-left: 0;
@@ -44,38 +80,41 @@
     + .menu__item {
         margin-left: 1rem;
     }
-
-    // &:hover, :focus-within {
-    //     background: rgb(255, 0, 0);
-    //     cursor: pointer;
-    // }
 }
 
-.menu__dropdown {
-    background: rgb(248, 161, 0);
-    visibility: hidden;
-    opacity: 0;
-    min-width: 5rem;
-    position: absolute;
-    transition: all 0.5s ease;
-    left: 0;
-    display: none;
+.header__buttons-group {
+    margin-right: 0;
+    margin-left: auto;
 }
 
-.menu__item:focus-within .link__text > div, .menu__item:hover .link__text > div {
-    background-color: rgba(0, 0, 0, 0.08);
+.header__button {
+    color: #000a75;
+
+    + .header__button {
+        margin-left: 1rem;
+    }
 }
 
-.menu__item:hover > .menu__dropdown,
-.menu__item:focus-within > .menu__dropdown,
-.menu__item .menu__dropdown:hover,
-.menu__item .menu__dropdown:focus {
-    visibility: visible;
-    opacity: 1;
-    display: block;
+.header__menu-button {
+    width: 0;
 }
 
-.dropdown__item {
-    clear: both;
-    width: 100%;
+.drawer {
+    min-width: 240px;
+}
+
+@media (min-width: 768px) {
+    .header__menu-button, .header_menu-drawer {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .header__menu, .header__buttons-group {
+        display: none;
+    }
+
+    .header-logo {
+        margin: 0 auto;
+    }
 }

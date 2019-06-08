@@ -3,38 +3,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 class Contact extends React.Component {
-    state = {
-        temp: 3
-    };
-
-    fetchForecast = async () => {
-        let response, respBody;
-        try {
-            response = await fetch(`https://cors-anywhere.herokuapp.com/www.metaweather.com/api/location/924938/`, { method: "GET"});
-            if (!response.ok) throw new Error(response.statusText);
-            respBody = await response.json();
-        } catch (e) {
-            console.log(e);
-        }
-        return respBody;
-    }
-
-    componentDidMount() {
-        this.fetchForecast()
-        .then(data => {
-            if (data && data.consolidated_weather) {
-                this.setState({
-                    temp: data.consolidated_weather,
-                });
-            }
-        }).catch(e => console.error(e));
-    }
 
     render() {
         return (
             <>
             <p>
-                {JSON.stringify(this.state.temp)}
                 Contact
             </p>
             <p>

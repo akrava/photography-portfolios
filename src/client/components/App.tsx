@@ -12,7 +12,7 @@ import { Provider } from "react-redux";
 import store from "@configs/configureReduxStore";
 import { Configs } from "@configs/general";
 
-export default class App extends React.Component {
+class App extends React.Component {
     render() {
         return (
             <Provider store={store}>
@@ -32,3 +32,5 @@ export default class App extends React.Component {
         );
     }
 }
+
+export default App;

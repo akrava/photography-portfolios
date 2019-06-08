@@ -5,4 +5,12 @@ const palette = {
     secondary: { main: "#5E35B1", contrastText: "#ffffff" }
 };
 
-export default createMuiTheme({ palette });
+const breakpointValues = {
+    xs: 0,
+    sm: 576,
+    md: 768,
+    lg: 992,
+    xl: 1200,
+};
+
+export default createMuiTheme({ palette, breakpoints: { values: breakpointValues } });

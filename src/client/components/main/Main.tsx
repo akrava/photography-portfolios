@@ -1,9 +1,9 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import Home from "@routes/home/Home";
-import Contact from "@routes/contact/Contact";
-import About from "@routes/about/About";
-import NotFound from "@routes/service/NotFound";
+import Home from "@components/routes/Home";
+import Contact from "@components/routes/Contact";
+import About from "@components/routes/About";
+import NotFound from "@components/routes/NotFound";
 import Breadcrumbs from "@components/special/Breadcrumbs";
 
 class Main extends React.Component {

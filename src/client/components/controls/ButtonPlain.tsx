@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "@material-ui/core";
+import { ButtonProps } from "@material-ui/core/Button";
 import { WithStyles, withStyles, createStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 
@@ -10,19 +11,17 @@ const styles = () => createStyles({
         height: "100%",
         textTransform: "unset",
         fontSize: "unset",
-        fontColor: "unset"
+        color: "unset"
     }
 });
 
-interface IButtonPlainProps extends WithStyles<typeof styles> {
-    className?: string;
-}
-
-class ButtonPlain extends React.Component<IButtonPlainProps> {
+class ButtonPlain extends React.Component<ButtonProps & WithStyles<typeof styles>> {
     render() {
+        const { className } = this.props;
+        const { root } = this.props.classes;
         return (
-            <div className={classNames("button-plain__wrapper", this.props.className)}>
-                <Button component="div" className={this.props.classes.root}>
+            <div className={classNames("button-plain__wrapper", className)}>
+                <Button className={root} {...this.props}>
                     {this.props.children}
                 </Button>
             </div>
