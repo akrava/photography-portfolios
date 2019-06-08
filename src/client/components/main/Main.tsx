@@ -9,7 +9,7 @@ import Breadcrumbs from "@components/special/Breadcrumbs";
 class Main extends React.Component {
     render() {
         return (
-            <main>
+            <main className="container main__container">
                 <Switch>
                     <Route exact={true} path="/" />
                     <Route component={Breadcrumbs} />

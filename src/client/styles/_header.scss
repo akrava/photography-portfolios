@@ -38,7 +38,7 @@
 }
 
 .header__link {
-    display: block;
+    display: inline-block;
     height: 100%;
 
     &_selected {
@@ -78,8 +78,14 @@
     height: 100%;
 
     + .menu__item {
-        margin-left: 1rem;
+        margin-left: 0.5rem;
     }
+}
+
+.menu__item + .menu__item::before {
+    content: "";
+    border-right: 1px solid #3c0c92;
+    margin-right: 0.5rem;
 }
 
 .header__buttons-group {

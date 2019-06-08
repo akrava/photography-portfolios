@@ -1,11 +1,25 @@
 import React from "react";
 //import Typography from "@material-ui/core/Typography";
 import { Link } from "react-router-dom";
+import ImageSlider from "@components/slider/ImageSlider";
 
 class Home extends React.Component {
     render() {
         return (
             <>
+            <ImageSlider
+                images={
+                    [
+                        "https://trainpix.org/photo/01/48/73/148737.jpg",
+                        "https://trainpix.org/photo/02/29/82/229820.jpg",
+                        "http://transphoto.ru/photo/12/24/01/1224013.jpg",
+                        "http://transphoto.ru/photo/12/23/69/1223691.jpg",
+                        "https://trainpix.org/photo/02/31/63/231636.jpg",
+                        "http://transphoto.ru/photo/12/08/03/1208031.jpg",
+                        "https://trainpix.org/photo/02/27/45/227454.jpg"
+                    ]
+                }
+            />
             <p>
                 Home
             </p>
