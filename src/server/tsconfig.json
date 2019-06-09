@@ -3,11 +3,11 @@
         "baseUrl":  ".",
         "rootDirs": [ "." ],
         "paths": {
-            "@routes/*":  [ "routes/*"  ],
-            "@models/*":  [ "models/*"  ],
-            "@modules/*": [ "modules/*" ],
-            "@configs/*": [ "configs/*" ],
-            "@app/*":     [ "./*"       ]
+            "@routes/*":   [ "routes/*"  ],
+            "@models/*":   [ "models/*"  ],
+            "@services/*": [ "services/*" ],
+            "@configs/*":  [ "configs/*" ],
+            "@app/*":      [ "./*"       ]
         },
         "outDir":                     "./../../build",
         "target":                     "esnext",
