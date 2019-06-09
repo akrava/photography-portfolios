@@ -15,8 +15,8 @@ class ArrowControls extends React.Component<IArrowControlsProps> {
         return (
             <div onClick={onChangeSlide} className={classNames("slider__arrow", classForArrow)}>
                 {side === "left"
-                    ? <ChevronLeftRounded className="slider__arrow-icon" fontSize="large" />
-                    : <ChevronRightRounded className="slider__arrow-icon" fontSize="large" />
+                    ? <ChevronLeftRounded className="slider__arrow-icon" fontSize="inherit" />
+                    : <ChevronRightRounded className="slider__arrow-icon" fontSize="inherit" />
                 }
             </div>
         );

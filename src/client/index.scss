@@ -41,3 +41,15 @@ html, body {
 .main__container {
     margin-top: 1.5rem;
 }
+
+.home__slider {
+    margin: 0 8rem;
+
+    @media (max-width: 1200px) {
+        margin: 0 4rem;
+    }
+
+    @media (max-width: 992px) {
+        margin: 0;
+    }
+}
