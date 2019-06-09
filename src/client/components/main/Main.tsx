@@ -5,21 +5,24 @@ import Contact from "@components/routes/Contact";
 import About from "@components/routes/About";
 import NotFound from "@components/routes/NotFound";
 import Breadcrumbs from "@components/special/Breadcrumbs";
+import ErrorBoundary from "@components/service/ErrorBoundary";
 
 class Main extends React.Component {
     render() {
         return (
             <main className="container main__container">
-                <Switch>
-                    <Route exact={true} path="/" />
-                    <Route component={Breadcrumbs} />
-                </Switch>
-                <Switch>
-                    <Route exact={true} path="/" component={Home} />
-                    <Route exact={true} path="/about" component={About} />
-                    <Route exact={true} path="/contact" component={Contact} />
-                    <Route component={NotFound} />
-                </Switch>
+                <ErrorBoundary>
+                    <Switch>
+                        <Route exact={true} path="/" />
+                        <Route component={Breadcrumbs} />
+                    </Switch>
+                    <Switch>
+                        <Route exact={true} path="/" component={Home} />
+                        <Route exact={true} path="/about" component={About} />
+                        <Route exact={true} path="/contact" component={Contact} />
+                        <Route component={NotFound} />
+                    </Switch>
+                </ErrorBoundary>
             </main>
         );
     }

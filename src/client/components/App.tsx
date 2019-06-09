@@ -11,6 +11,7 @@ import { SnackbarProvider } from "notistack";
 import { Provider } from "react-redux";
 import store from "@configs/configureReduxStore";
 import { Configs } from "@configs/general";
+import ErrorBoundary from "@components/service/ErrorBoundary";
 
 class App extends React.Component {
     render() {
@@ -21,9 +22,11 @@ class App extends React.Component {
                         <BrowserRouter>
                             <ScrollToTop>
                                 <CssBaseline />
-                                <Header />
-                                <Main />
-                                <Footer />
+                                <ErrorBoundary>
+                                    <Header />
+                                    <Main />
+                                    <Footer />
+                                </ErrorBoundary>
                             </ScrollToTop>
                         </BrowserRouter>
                     </MuiThemeProvider>
