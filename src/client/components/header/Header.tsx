@@ -91,10 +91,10 @@ class Header extends React.Component<WithStyles<typeof styles>> {
                         <MenuItem
                             name="Albums"
                             subMenu={[
-                                { name: "All", link: "/all" },
-                                { name: "Something", link: "/sdfgdfg" },
-                                { name: "Hello", link: "/kjs" },
-                                { name: "Uhh bb n", link: "/rey" }
+                                { name: "All", link: "/albums/all" },
+                                { name: "Something", link: "/albums/sdfgdfg" },
+                                { name: "Hello", link: "/albums/kjs" },
+                                { name: "Uhh bb n", link: "/albums/dfgh/rey" }
                             ]}
                         />
                         <MenuItem name="About" link="/about" />

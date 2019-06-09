@@ -62,3 +62,24 @@ html, body {
     margin-top: 3px;
     white-space: pre-wrap;
 }
+
+.breadcrumbs__wrapper {
+    background: #adb6ea61;
+    padding: 0.5rem 1rem;
+    border-radius: 0.4rem;
+}
+
+.breadcrumbs__home-icon {
+    margin-bottom: -5px;
+}
+
+.breadcrumbs__link {
+    @extend .link;
+
+    color: #551a8b;
+    transition: color ease-in-out 0.2s;
+
+    &:hover {
+        color: #300cce;
+    }
+}
