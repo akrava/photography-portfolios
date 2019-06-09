@@ -1,13 +1,19 @@
 import React from "react";
+import { Switch, Route } from "react-router-dom";
 
 class Footer extends React.Component {
     render() {
         return (
-            <footer>
-                <p>
-                    Powered by Arkadiy Krava
-                </p>
-            </footer>
+            <Switch>
+                <Route exact={true} path="/(login|register)/" />
+                <Route>
+                    <footer>
+                        <p>
+                            Powered by Arkadiy Krava
+                        </p>
+                    </footer>
+                </Route>
+            </Switch>
         );
     }
 }

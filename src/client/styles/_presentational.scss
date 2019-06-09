@@ -1,0 +1,65 @@
+$header-height: 64px;
+$header-height-md: 62px;
+
+.presentational {
+    width: 100%;
+    text-align: left;
+    min-height: calc(100vh - #{$header-height});
+    position: relative;
+    background-size: cover;
+    background-position: center bottom;
+    color: #fff;
+    display: flex;
+    align-items: center;
+
+    @media (max-width: 576px) {
+        min-height: calc(100vh - #{$header-height-md});
+    }
+}
+
+.presentational__bg-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.presentational__container {
+    height: 100%;
+    z-index: 2;
+}
+
+.presentational__content {
+    padding: 1rem;
+}
+
+.presentational__additional-info {
+    text-align: center;
+    color: #fff;
+    margin-top: 40px;
+
+    @media (max-width: 576px) {
+        position: absolute;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+.presentational__link {
+    color: #fff;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.presentational_login {
+    background-image: url("/bg_railroad.jpg");
+}
+
+.presentational_register {
+    background-image: url("/bg_wide.jpeg");
+}

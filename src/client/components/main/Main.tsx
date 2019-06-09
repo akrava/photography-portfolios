@@ -3,12 +3,14 @@ import { Switch, Route } from "react-router-dom";
 import Home from "@components/routes/Home";
 import Contact from "@components/routes/Contact";
 import About from "@components/routes/About";
+import Login from "@routes/Login";
+import Register from "@routes/Register";
 import NotFound from "@components/routes/NotFound";
 import Breadcrumbs from "@components/special/Breadcrumbs";
 import ErrorBoundary from "@components/service/ErrorBoundary";
 
 class Main extends React.Component {
-    render() {
+    renderOrdinaryTemplate = () => {
         return (
             <main className="container main__container">
                 <ErrorBoundary>
@@ -24,6 +26,31 @@ class Main extends React.Component {
                     </Switch>
                 </ErrorBoundary>
             </main>
+        );
+    }
+
+    renderFullViewPortTemplate = () => {
+        return (
+            <Switch>
+                <Route exact={true} path="/login" component={Login} />
+                <Route exact={true} path="/register" component={Register} />
+            </Switch>
+        );
+    }
+
+    render() {
+        const { renderOrdinaryTemplate, renderFullViewPortTemplate } = this;
+        return (
+            <ErrorBoundary>
+                <Switch>
+                    <Route path="/(login|register)/">
+                        {renderFullViewPortTemplate}
+                    </Route>
+                    <Route>
+                        {renderOrdinaryTemplate}
+                    </Route>
+                </Switch>
+            </ErrorBoundary>
         );
     }
 }

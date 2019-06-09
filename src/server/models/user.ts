@@ -5,7 +5,6 @@ export interface IUserModel extends Mongoose.Document {
     password: string;
     role: number;
     fullname: string;
-    email: string;
     registered: Date;
     avaUrl: string;
 }
@@ -15,7 +14,6 @@ const UserScheme = new Mongoose.Schema({
     password:   { type: String, required: true },
     role:       { type: Number, required: true },
     fullname:   { type: String, required: true },
-    email:      { type: String, required: true },
     registered: { type: Date,   default: Date.now() },
     avaUrl:     { type: String, default: "/images/userpic.png" },
 });
@@ -26,7 +24,7 @@ class User {
     static async getAll() {
         const model = await UserModel.find();
         return model.map((x) => new User(
-            x.id, x.login, x.password, x.role, x.fullname, x.email, x.registered, x.avaUrl
+            x.id, x.login, x.password, x.role, x.fullname, x.registered, x.avaUrl
         ));
     }
 
@@ -35,9 +33,9 @@ class User {
         if (!model) {
             return null;
         }
-        const { login, password, role, fullname, email, registered, avaUrl } = model;
+        const { login, password, role, fullname, registered, avaUrl } = model;
         return new User(
-            id, login, password, role, fullname, email, registered, avaUrl
+            id, login, password, role, fullname, registered, avaUrl
         );
     }
 
@@ -56,8 +54,7 @@ class User {
 
     static async update(x: User) {
         const property = { $set: {
-            role: x.role, fullname: x.fullname, avaUrl: x.avaUrl,
-            email: x.email, password: x.password
+            role: x.role, fullname: x.fullname, avaUrl: x.avaUrl, password: x.password
         }};
         UserModel.findByIdAndUpdate(x.id, property);
         return await User.getById(x.id);
@@ -72,7 +69,6 @@ class User {
     password: string;
     role: number;
     fullname: string;
-    email: string;
     registered?: Date;
     avaUrl?: string;
 
@@ -82,7 +78,6 @@ class User {
         password: string,
         role: number,
         fullname: string,
-        email: string,
         registered?: Date,
         avaUrl?: string
     ) {
@@ -91,7 +86,6 @@ class User {
         this.password = password;
         this.role = role;
         this.fullname = fullname;
-        this.email = email;
         this.registered = registered;
         this.avaUrl = avaUrl;
     }

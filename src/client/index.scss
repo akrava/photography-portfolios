@@ -1,5 +1,6 @@
 @import "styles/header";
 @import "styles/slider";
+@import "styles/presentational";
 
 html, body {
     font-size: 16px;
@@ -24,6 +25,7 @@ html, body {
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
+
     @media (min-width: 576px) {
         max-width: 540px;
     }
@@ -81,5 +83,11 @@ html, body {
 
     &:hover {
         color: #300cce;
+    }
+}
+
+@media (max-width: 576px) {
+    .register__button {
+        margin-bottom: 55px;
     }
 }
