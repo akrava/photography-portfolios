@@ -43,9 +43,17 @@ class ImageSlider extends React.Component<IImageSliderProps, IImageSliderState> 
         }
     }
 
+    resetAutoplay = () => {
+        const { autoplayIntervalId } = this.state;
+        if (autoplayIntervalId > 0) {
+            window.clearInterval(autoplayIntervalId);
+        }
+        this.enableAutoplay();
+    }
+
     enableAutoplay = () => {
         const autoplayIntervalId = window.setInterval(() => {
-            this.switchToNextSlide();
+            this.switchToNextSlide(false);
         }, 3000);
         this.setState({ autoplayIntervalId });
     }
@@ -58,7 +66,10 @@ class ImageSlider extends React.Component<IImageSliderProps, IImageSliderState> 
         });
     }
 
-    switchToSlide = (slide: number) => {
+    switchToSlide = (slide: number, resetAutoplay = true) => {
+        if (resetAutoplay) {
+            this.resetAutoplay();
+        }
         const { currentSlide, countAllSlides } = this.state;
         if (slide === currentSlide) {
             return;
@@ -71,14 +82,14 @@ class ImageSlider extends React.Component<IImageSliderProps, IImageSliderState> 
         this.setState({ currentSlide: slide });
     }
 
-    switchToNextSlide = () => {
+    switchToNextSlide = (resetAutoplay = true) => {
         const { currentSlide } = this.state;
-        this.switchToSlide(currentSlide + 1);
+        this.switchToSlide(currentSlide + 1, resetAutoplay);
     }
 
-    switchToPrevSlide = () => {
+    switchToPrevSlide = (resetAutoplay = true) => {
         const { currentSlide } = this.state;
-        this.switchToSlide(currentSlide - 1);
+        this.switchToSlide(currentSlide - 1, resetAutoplay);
     }
 
     handleLoadImage = (i: number) => {
