@@ -36,7 +36,7 @@ app.use(((err, _req, res, _next) => {
 }) as Express.ErrorRequestHandler);
 
 Mongoose.connect(databaseUrl!, connectionsOptions)
-    .then(() => console.log(`Opened connection wih db`))
+    .then(() => console.log(`Opened connection with db`))
     .then(() => app.listen(
         Enviroment.Port, () => console.log(`Server is running on port ${Enviroment.Port}`)
     )).catch((err) => console.error("An error ocurred while startting web-server: ", err.message));
