@@ -10,6 +10,7 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 export interface IMenuLink {
     name: string;
     link?: string;
+    img?: string;
 }
 
 export interface IMenuItemProps extends IMenuLink {
@@ -35,11 +36,11 @@ class MenuItem extends React.Component<IMenuItemProps & WithWidthProps & RouteCo
     }
 
     menuLinkWithSubMenu = () => {
-        const { subMenu, name } = this.props;
+        const { subMenu, name, img } = this.props;
         if (isWidthUp("md", this.props.width!)) {
-           return <SubMenu name={name} menu={subMenu!} />;
+           return <SubMenu img={img} name={name} menu={subMenu!} />;
         }
-        return <DrawerListSubMenu name={name} menu={subMenu!} />;
+        return <DrawerListSubMenu img={img} name={name} menu={subMenu!} />;
     }
 
     render() {

@@ -3,7 +3,7 @@ import MenuDrawer, { IMenuDrawerProps } from "@components/header/MenuDrawer";
 
 class Menu extends React.Component<IMenuDrawerProps> {
     render() {
-        const { drawerIsOpened, toggleDrawer } = this.props;
+        const { drawerIsOpened, toggleDrawer, userObject } = this.props;
         return (
             <>
                 <nav role="navigation" className="header__menu">
@@ -11,7 +11,11 @@ class Menu extends React.Component<IMenuDrawerProps> {
                         {this.props.children}
                     </ul>
                 </nav>
-                <MenuDrawer toggleDrawer={toggleDrawer} drawerIsOpened={drawerIsOpened}>
+                <MenuDrawer
+                    userObject={userObject}
+                    toggleDrawer={toggleDrawer}
+                    drawerIsOpened={drawerIsOpened}
+                >
                     {this.props.children}
                 </MenuDrawer>
             </>

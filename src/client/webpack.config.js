@@ -18,12 +18,14 @@ module.exports = {
     resolve: {
         extensions: [ ".ts", ".tsx", ".js", '.mjs', ".json" ],
         alias: {
-            "@app":        relativePath("."),
-            "@components": relativePath("components"),
-            "@reducers":   relativePath("reducers"),
-            "@actions":    relativePath("actions"),
-            "@configs":    relativePath("configs"),
-            "@routes":     relativePath("components/routes")
+            "@app":         relativePath("."),
+            "@components":  relativePath("components"),
+            "@reducers":    relativePath("reducers"),
+            "@actions":     relativePath("actions"),
+            "@configs":     relativePath("configs"),
+            "@middlewares": relativePath("middlewares"),
+            "@model":       relativePath("model"),
+            "@routes":      relativePath("components/routes")
         }
     },
     module: {

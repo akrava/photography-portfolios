@@ -15,7 +15,7 @@ const UserScheme = new Mongoose.Schema({
     role:       { type: Number, required: true },
     fullname:   { type: String, required: true },
     registered: { type: Date,   default: Date.now() },
-    avaUrl:     { type: String, default: "/images/userpic.png" },
+    avaUrl:     { type: String, default: "/userpic.png" },
 });
 
 const UserModel = Mongoose.model<IUserModel>("User", UserScheme);

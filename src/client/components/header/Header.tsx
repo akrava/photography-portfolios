@@ -4,7 +4,11 @@ import { Configs } from "@configs/general";
 import { AppBar, Toolbar } from "@material-ui/core";
 import ButtonPlain from "@components/controls/ButtonPlain";
 import { WithStyles, withStyles, createStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
+import { IApplicationStore } from "@configs/configureReduxStore";
+import { IUserState } from "@actions/user";
 import Menu from "@components/header/Menu";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import MenuItem from "@components/header/MenuItem";
 import classNames from "classnames";
 import Button from "@material-ui/core/Button";
@@ -44,7 +48,15 @@ const styles = () => createStyles({
     }
 });
 
-class Header extends React.Component<WithStyles<typeof styles>> {
+interface IHeaderProps {
+    user: IUserState;
+}
+
+class Header extends React.Component<IHeaderProps & WithStyles<typeof styles>> {
+    static mapStateToProps(store: IApplicationStore) {
+        return { user: store.user };
+    }
+
     state = {
         drawerIsOpened: false,
     };
@@ -61,10 +73,53 @@ class Header extends React.Component<WithStyles<typeof styles>> {
         this.setState({ drawerIsOpened: open });
     }
 
+    renderLoginGroup = () => {
+        const { buttonLogin, buttonRegister } = this.props.classes;
+        return (
+            <div className="header__right-group">
+                <Link className="link header__button" to="/login">
+                    <Button
+                        className={buttonLogin}
+                        variant="outlined"
+                        color="secondary"
+                    >
+                        Login
+                    </Button>
+                </Link>
+                <Link className="link header__button" to="/register">
+                    <Button
+                        className={buttonRegister}
+                        variant="outlined"
+                        color="default"
+                    >
+                        Register
+                    </Button>
+                </Link>
+            </div>
+        );
+    }
+
+    renderUserProfile = () => {
+        const { fullname, avaUrl } = this.props.user.userObject!;
+        return (
+            <div className="header__login-group">
+                <MenuItem
+                    img={avaUrl}
+                    name={fullname}
+                    subMenu={[
+                        { name: "My profile", link: "/user/me" },
+                        { name: "Logout", link: "/logout" },
+                    ]}
+                />
+            </div>
+        );
+    }
+
     render() {
-        const { toggleDrawer } = this;
+        const { toggleDrawer, renderLoginGroup, renderUserProfile } = this;
         const { drawerIsOpened } = this.state;
-        const { root, buttonLogin, buttonRegister, buttonMenu } = this.props.classes;
+        const { root, buttonMenu } = this.props.classes;
+        const { isFetching, isLogined, userObject } = this.props.user;
         return (
             <AppBar className={classNames(root, "header")} position="sticky">
                 <Toolbar>
@@ -87,7 +142,11 @@ class Header extends React.Component<WithStyles<typeof styles>> {
                             />
                         </ButtonPlain>
                     </Link>
-                    <Menu drawerIsOpened={drawerIsOpened} toggleDrawer={toggleDrawer}>
+                    <Menu
+                        userObject={userObject}
+                        drawerIsOpened={drawerIsOpened}
+                        toggleDrawer={toggleDrawer}
+                    >
                         <MenuItem
                             name="Albums"
                             subMenu={[
@@ -100,30 +159,19 @@ class Header extends React.Component<WithStyles<typeof styles>> {
                         <MenuItem name="About" link="/about" />
                         <MenuItem name="Contact" link="/contact" />
                     </Menu>
-                    <div className="header__buttons-group">
-                        <Link className="link header__button" to="/login">
-                            <Button
-                                className={buttonLogin}
-                                variant="outlined"
-                                color="secondary"
-                            >
-                                Login
-                            </Button>
-                        </Link>
-                        <Link className="link header__button" to="/register">
-                            <Button
-                                className={buttonRegister}
-                                variant="outlined"
-                                color="default"
-                            >
-                                Register
-                            </Button>
-                        </Link>
-                    </div>
+                    {isLogined
+                        ? renderUserProfile()
+                        : renderLoginGroup()
+                    }
                 </Toolbar>
+                {isFetching &&
+                    <div className="header__loading-strip">
+                        <LinearProgress />
+                    </div>
+                }
             </AppBar>
         );
     }
 }
 
-export default withStyles(styles)(Header);
+export default connect(Header.mapStateToProps)(withStyles(styles)(Header));

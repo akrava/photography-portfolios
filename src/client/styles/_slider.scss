@@ -1,6 +1,10 @@
 .slider {
     position: relative;
     min-height: 20rem;
+
+    @media (max-width: 576px) {
+        min-height: 10rem;
+    }
 }
 
 .slide__img {

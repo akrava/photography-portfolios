@@ -5,6 +5,8 @@ import List from "@material-ui/core/List";
 import Collapse from "@material-ui/core/Collapse";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
 import { WithStyles, withStyles, createStyles } from "@material-ui/core/styles";
 import { ISubMenuProps } from "@components/header/SubMenu";
 import DrawerListItem from "@components/header/DrawerListItem";
@@ -30,12 +32,17 @@ class DrawerListSubMenu extends React.Component<ISubMenuProps & WithStyles<typeo
     render() {
         const { isOpened } = this.state;
         const { handleClick } = this;
-        const { name, menu } = this.props;
+        const { name, menu, img } = this.props;
         const { nestedListItem } = this.props.classes;
         const selected = menu.some((x) => x.link === window.location.pathname);
         return (
             <>
                 <ListItem selected={selected} button={true} onClick={handleClick}>
+                    {img &&
+                        <ListItemAvatar>
+                            <Avatar src={img} />
+                        </ListItemAvatar>
+                    }
                     <ListItemText primary={name} />
                     {isOpened ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>

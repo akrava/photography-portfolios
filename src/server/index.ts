@@ -11,7 +11,9 @@ import { getUserFromToken } from "@services/authentication";
 
 const app = Express();
 const databaseUrl = Enviroment.DatabaseUrl;
-const connectionsOptions = { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false };
+const connectionsOptions = {
+    useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false
+};
 
 app.use(Express.static("dist"));
 app.use(Express.static("assets"));

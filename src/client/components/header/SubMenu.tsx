@@ -6,9 +6,11 @@ import ButtonPlain from "@components/controls/ButtonPlain";
 import { IMenuLink } from "@components/header/MenuItem";
 import { withRouter } from "react-router-dom";
 import { RouteComponentProps } from "react-router";
+import Avatar from "@material-ui/core/Avatar";
 
 export interface ISubMenuProps {
     name: string;
+    img?: string;
     menu: IMenuLink[];
 }
 
@@ -71,7 +73,7 @@ class SubMenu extends React.Component<ISubMenuProps & RouteComponentProps> {
     }
 
     render() {
-        const { name } = this.props;
+        const { name, img } = this.props;
         const { anchorEl } = this.state;
         const { handleClick, handleClose, renderSubMenuItems } = this;
         return (
@@ -83,6 +85,7 @@ class SubMenu extends React.Component<ISubMenuProps & RouteComponentProps> {
                     aria-haspopup="true"
                     onClick={handleClick}
                 >
+                    {img &&  <Avatar className="login-group__avatar" src={img} />}
                     {name}
                 </ButtonPlain>
                 <StyledMenu

@@ -33,13 +33,18 @@ const styles = ({ palette }: Theme) => createStyles({
 
 class StyledInput extends React.Component<FilledTextFieldProps & WithStyles<typeof styles>> {
     render() {
-        const { classes } = this.props;
+        const { classes, error, helperText, value, label, type, onChange } = this.props;
         return (
             <TextField
                 fullWidth={true}
                 margin={"normal"}
                 variant="filled"
-                {...this.props}
+                error={error}
+                helperText={helperText}
+                value={value}
+                label={label}
+                type={type}
+                onChange={onChange}
                 InputLabelProps={{
                     classes: {
                         root: classes.inputLabel,

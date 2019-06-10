@@ -88,9 +88,19 @@
     margin-right: 0.5rem;
 }
 
-.header__buttons-group {
+.header__right-group {
     margin-right: 0;
     margin-left: auto;
+}
+
+.header__login-group {
+    @extend .header__right-group;
+
+    height: 100%;
+}
+
+.login-group__avatar {
+    margin-right: 0.6rem;
 }
 
 .header__button {
@@ -105,6 +115,12 @@
     width: 0;
 }
 
+.header__loading-strip {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
 .drawer {
     min-width: 240px;
 }
@@ -116,7 +132,7 @@
 }
 
 @media (max-width: 767px) {
-    .header__menu, .header__buttons-group {
+    .header__menu, .header__right-group, .header__login-group {
         display: none;
     }
 

@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -8,8 +9,10 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { WithStyles, withStyles, createStyles } from "@material-ui/core/styles";
 import PresentationalPage from "@components/special/PresentationalPage";
 import StyledInput from "@components/controls/StyledInput";
+import { IApplicationStore } from "@configs/configureReduxStore";
+import { register, IUserState, UserThunkDispatch } from "@actions/user";
 
-const styles = () => createStyles({
+export const styles = () => createStyles({
     checkbox: {
         color: "rgba(255,255,255,0.87)",
     },
@@ -25,11 +28,11 @@ const styles = () => createStyles({
     }
 });
 
-type onChangeEventType = React.ChangeEvent<
+export type onChangeEventType = React.ChangeEvent<
     HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 >;
 
-interface IStringKVP { [key: string]: string; }
+export interface IStringKVP { [key: string]: string; }
 
 interface IFormInputs {
     fullname: string;
@@ -38,7 +41,43 @@ interface IFormInputs {
     confirmPassword: string;
 }
 
-class Register extends React.Component<WithStyles<typeof styles>> {
+export function isValidForm(arrayErrorObjects: IStringKVP[]) {
+    for (const objetct of arrayErrorObjects) {
+        for (const value in objetct) {
+            if (objetct[value] !== "") {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+export function getSummaryErrorObject(arrayErrorObjects: IStringKVP[]) {
+    return arrayErrorObjects.reduce((prevObject, currentObject) => (
+        { ...prevObject, ...currentObject }
+    ), {});
+}
+
+interface IRegisterProps {
+    user: IUserState;
+    register: (
+        fullname: string, username: string, password: string, isPhotographer: boolean
+    ) => void;
+}
+
+class Register extends React.Component<IRegisterProps & WithStyles<typeof styles>> {
+    static mapStateToProps(store: IApplicationStore) {
+        return { user: store.user };
+    }
+
+    static mapDispatchToProps(dispatch: UserThunkDispatch) {
+        return {
+            register: (
+                fullname: string, username: string, password: string, isPhotographer: boolean
+            ) => dispatch(register(fullname, username, password, isPhotographer))
+        };
+    }
+
     state = {
         fullname: "",
         username: "",
@@ -55,26 +94,9 @@ class Register extends React.Component<WithStyles<typeof styles>> {
         checkSubmit: false
     };
 
-    isValidForm(arrayErrorObjects: IStringKVP[]) {
-        for (const objetct of arrayErrorObjects) {
-            for (const value in objetct) {
-                if (objetct[value] !== "") {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    getSummaryErrorObject(arrayErrorObjects: IStringKVP[]) {
-        return arrayErrorObjects.reduce((prevObject, currentObject) => (
-            { ...prevObject, ...currentObject }
-        ), {});
-    }
-
     setButtonStatus = (state: IFormInputs) => {
         const errorObjects = this.formCheckValidity(state);
-        return { submitEnabled: this.isValidForm(errorObjects) };
+        return { submitEnabled: isValidForm(errorObjects) };
     }
 
     handleFieldChange = (event: onChangeEventType, field: string) => {
@@ -173,26 +195,19 @@ class Register extends React.Component<WithStyles<typeof styles>> {
     handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const errorObjects = this.formCheckValidity(this.state);
-        console.log(errorObjects);
-        if (this.isValidForm(errorObjects) === false) {
+        if (isValidForm(errorObjects) === false) {
             event.stopPropagation();
             this.setState({
                 checkSubmit: true,
                 submitEnabled: false,
                 error: {
-                    ...this.getSummaryErrorObject(errorObjects)
+                    ...getSummaryErrorObject(errorObjects)
                 }
             });
             return;
         }
-        // const { login, password, remember } = this.state;
-        // const { context } = this.props;
-        // const isLogined = context.login(login, password, remember);
-        // if (isLogined) {
-        //     this.setState({ errorLogin: false, redirectTo: "/dashboard" });
-        // } else {
-        //     this.setState({ errorLogin: true });
-        // }
+        const { fullname, password, username, isPhotographer } = this.state;
+        this.props.register(fullname, username, password, isPhotographer);
     }
 
     render() {
@@ -202,6 +217,7 @@ class Register extends React.Component<WithStyles<typeof styles>> {
         } = this.state;
         const { fullnameE, usernameE, passwordE, confirmPasswordE } = this.state.error;
         const { classes } = this.props;
+        const { isFetching } = this.props.user;
         return (
             <PresentationalPage classNameRoot="presentational_register">
                 <form onSubmit={handleSubmit}>
@@ -266,7 +282,7 @@ class Register extends React.Component<WithStyles<typeof styles>> {
                                 fullWidth={true}
                                 variant={"contained"}
                                 color={"primary"}
-                                disabled={!submitEnabled}
+                                disabled={!submitEnabled || isFetching}
                                 type="submit"
                             >
                                 Sign up
@@ -286,4 +302,5 @@ class Register extends React.Component<WithStyles<typeof styles>> {
     }
 }
 
-export default withStyles(styles)(Register);
+export default connect(Register.mapStateToProps, Register.mapDispatchToProps)
+    (withStyles(styles)(Register));
