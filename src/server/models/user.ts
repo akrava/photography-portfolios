@@ -91,11 +91,11 @@ class User {
     }
 
     async loadAvatarToStorage() {
-        console.log("---");
+        throw new Error("Not implemeted");
     }
 
     async deleteAvatarFromStorage() {
-        console.log("---");
+        throw new Error("Not implemeted");
     }
 }
 

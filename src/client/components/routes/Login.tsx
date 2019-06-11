@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -127,7 +127,10 @@ class Login extends React.Component<ILoginProps & WithStyles<typeof styles>> {
         const { username, password, submitEnabled } = this.state;
         const { usernameE, passwordE } = this.state.error;
         const { classes } = this.props;
-        const { isFetching } = this.props.user;
+        const { isFetching, isLogined } = this.props.user;
+        if (isLogined) {
+            return <Redirect to="/" />;
+        }
         return (
             <PresentationalPage classNameRoot="presentational_login">
                 <form onSubmit={handleSubmit}>

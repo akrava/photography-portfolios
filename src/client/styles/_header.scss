@@ -125,13 +125,13 @@
     min-width: 240px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 790px) {
     .header__menu-button, .header_menu-drawer {
         display: none;
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 789px) {
     .header__menu, .header__right-group, .header__login-group {
         display: none;
     }

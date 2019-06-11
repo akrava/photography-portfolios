@@ -81,7 +81,6 @@ class Header extends React.Component<IHeaderProps & WithStyles<typeof styles>> {
                     <Button
                         className={buttonLogin}
                         variant="outlined"
-                        color="secondary"
                     >
                         Login
                     </Button>
@@ -90,7 +89,6 @@ class Header extends React.Component<IHeaderProps & WithStyles<typeof styles>> {
                     <Button
                         className={buttonRegister}
                         variant="outlined"
-                        color="default"
                     >
                         Register
                     </Button>
@@ -147,13 +145,14 @@ class Header extends React.Component<IHeaderProps & WithStyles<typeof styles>> {
                         drawerIsOpened={drawerIsOpened}
                         toggleDrawer={toggleDrawer}
                     >
+                        <MenuItem name="Photos" link="/photos" />
                         <MenuItem
-                            name="Albums"
+                            name="Portfolios"
                             subMenu={[
-                                { name: "All", link: "/albums/all" },
-                                { name: "Something", link: "/albums/sdfgdfg" },
-                                { name: "Hello", link: "/albums/kjs" },
-                                { name: "Uhh bb n", link: "/albums/dfgh/rey" }
+                                { name: "All", link: "/portfolios/" },
+                                { name: "Photographers", link: "/portfolios/photographers" },
+                                { name: "Designers", link: "/portfolios/designers" },
+                                { name: "Artists", link: "/portfolios/artists" }
                             ]}
                         />
                         <MenuItem name="About" link="/about" />

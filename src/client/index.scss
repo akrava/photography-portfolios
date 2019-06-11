@@ -17,6 +17,7 @@ html, body {
 
 .button-plain__wrapper {
     height: inherit;
+    display: inline-block;
 }
 
 .container {
@@ -29,7 +30,7 @@ html, body {
     @media (min-width: 576px) {
         max-width: 540px;
     }
-    @media (min-width: 768px) {
+    @media (min-width: 790px) {
         max-width: 720px;
     }
     @media (min-width: 992px) {

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -217,7 +217,10 @@ class Register extends React.Component<IRegisterProps & WithStyles<typeof styles
         } = this.state;
         const { fullnameE, usernameE, passwordE, confirmPasswordE } = this.state.error;
         const { classes } = this.props;
-        const { isFetching } = this.props.user;
+        const { isFetching, isLogined } = this.props.user;
+        if (isLogined) {
+            return <Redirect to="/" />;
+        }
         return (
             <PresentationalPage classNameRoot="presentational_register">
                 <form onSubmit={handleSubmit}>
@@ -266,7 +269,7 @@ class Register extends React.Component<IRegisterProps & WithStyles<typeof styles
                                 className={classes.checkbox}
                             />
                         }
-                        label="Create an account of photographer"
+                        label="Create a portfolio"
                         classes={{
                             label: classes.checkboxLabel,
                         }}

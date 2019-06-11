@@ -6,7 +6,9 @@ import About from "@components/routes/About";
 import Login from "@routes/Login";
 import Register from "@routes/Register";
 import NotFound from "@components/routes/NotFound";
+import Logout from "@components/routes/Logout";
 import Breadcrumbs from "@components/special/Breadcrumbs";
+import Photos from "@routes/Photos";
 import ErrorBoundary from "@components/service/ErrorBoundary";
 
 class Main extends React.Component {
@@ -22,6 +24,8 @@ class Main extends React.Component {
                         <Route exact={true} path="/" component={Home} />
                         <Route exact={true} path="/about" component={About} />
                         <Route exact={true} path="/contact" component={Contact} />
+                        <Route exact={true} path="/logout" component={Logout} />
+                        <Route path="/photos" component={Photos} />
                         <Route component={NotFound} />
                     </Switch>
                 </ErrorBoundary>
