@@ -28,7 +28,7 @@ const styles = ({ palette }: Theme) => createStyles({
 });
 
 interface IPhotosProps {
-    photos: IPhotoState
+    photos: IPhotoState;
     getAll: (limit: number, offset: number) => void;
 }
 
@@ -56,7 +56,7 @@ class Photos extends React.Component<IPhotosProps & WithStyles<typeof styles>> {
                 <GridListTile key="Subheader" cols={2} style={{ height: "auto" }}>
                     <ListSubheader component="div">December</ListSubheader>
                 </GridListTile>
-                {this.props.photos.photoArray && this.props.photos.photoArray.map(tile => (
+                {this.props.photos.photoArray && this.props.photos.photoArray.map((tile) => (
                     <GridListTile key={tile.url}>
                         <img src={tile.url} alt={tile.name} />
                         <GridListTileBar
