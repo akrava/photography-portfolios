@@ -1,0 +1,35 @@
+.photos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    overflow: hidden;
+    margin: 1rem auto;
+}
+
+.photo-card__icon {
+    color: rgba(255, 255, 255, 0.54);
+}
+
+$photo-card-title-hegight: 4.5rem;
+
+.photo-card__title {
+    height: $photo-card-title-hegight;
+    transform: translateY($photo-card-title-hegight);
+    transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.photo-card {
+    max-width: 23rem;
+
+    @media (max-width: $sm) {
+        margin: 0 auto;
+    }
+
+    &:hover .photo-card__title {
+        transform: translateY(0);
+    }
+}
+
+.photos__grid {
+    width: 100%;
+}

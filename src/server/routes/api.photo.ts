@@ -8,13 +8,14 @@ router.get("/", async (req, res) => {
         res.status(400).send({ err: "Invalid request data in body" });
         return;
     }
-    let { offset, limit, sortAsc, widescreen } = req.params;
-    const { query, category, owner } = req.params;
+    let { offset, limit, sortAsc, widescreen, category } = req.query;
+    const { query, owner } = req.query;
     let photos;
     offset = Number.parseInt(offset, 10);
     limit = Number.parseInt(limit, 10);
-    sortAsc = Boolean(sortAsc);
-    widescreen = Boolean(widescreen);
+    sortAsc = stringToBoolean(sortAsc);
+    widescreen = stringToBoolean(widescreen);
+    category = category && category.split(",");
     try {
         photos = await Photo.getAll(
             offset, limit, sortAsc, query, category, widescreen, owner
@@ -25,5 +26,9 @@ router.get("/", async (req, res) => {
     }
     res.send(photos);
 });
+
+function stringToBoolean(val: string) {
+    return val === "true" ? true : val === "false" ? false : undefined;
+}
 
 export default router;

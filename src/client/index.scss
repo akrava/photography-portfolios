@@ -1,6 +1,8 @@
+@import "styles/configs";
 @import "styles/header";
 @import "styles/slider";
 @import "styles/presentational";
+@import "styles/photos";
 
 html, body {
     font-size: 16px;
@@ -27,16 +29,16 @@ html, body {
     margin-right: auto;
     margin-left: auto;
 
-    @media (min-width: 576px) {
+    @media (min-width: $sm) {
         max-width: 540px;
     }
-    @media (min-width: 790px) {
+    @media (min-width: $md) {
         max-width: 720px;
     }
-    @media (min-width: 992px) {
+    @media (min-width: $lg) {
         max-width: 960px;
     }
-    @media (min-width: 1200px) {
+    @media (min-width: $xl) {
         max-width: 1140px;
     }
 }
@@ -48,11 +50,11 @@ html, body {
 .home__slider {
     margin: 0 8rem;
 
-    @media (max-width: 1200px) {
+    @media (max-width: $xl) {
         margin: 0 4rem;
     }
 
-    @media (max-width: 992px) {
+    @media (max-width: $lg) {
         margin: 0;
     }
 }
@@ -87,8 +89,31 @@ html, body {
     }
 }
 
-@media (max-width: 576px) {
+@media (max-width: $sm) {
     .register__button {
         margin-bottom: 55px;
     }
+}
+
+.pagination {
+    margin: 1.5rem auto;
+}
+
+.pagination__pages-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-item {
+    width: 100%;
+}
+
+.input-item__chip {
+    margin: 0 0.3rem;
+}
+
+.input-item__chip-group {
+    display: flex;
+    justify-content: center;
 }

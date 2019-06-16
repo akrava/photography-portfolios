@@ -1,80 +1,124 @@
 import React from "react";
 import { connect } from "react-redux";
-import { WithStyles, withStyles, createStyles, Theme } from "@material-ui/core/styles";
+import withWidth, { WithWidthProps, isWidthUp } from "@material-ui/core/withWidth";
 import { IApplicationStore } from "@configs/configureReduxStore";
 import { getAll, IPhotoState, PhotoThunkDispatch } from "@actions/photo";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
-import ListSubheader from "@material-ui/core/ListSubheader";
 import IconButton from "@material-ui/core/IconButton";
 import InfoIcon from "@material-ui/icons/Info";
-
-const styles = ({ palette }: Theme) => createStyles({
-    root: {
-      display: "flex",
-      flexWrap: "wrap",
-      justifyContent: "space-around",
-      overflow: "hidden",
-      backgroundColor: palette.background.paper,
-    },
-    gridList: {
-      width: 500,
-      height: 450,
-    },
-    icon: {
-      color: "rgba(255, 255, 255, 0.54)",
-    },
-});
+import Pagination from "@components/controls/Pagination";
+import PhotosFormControl from "@components/photos/PhotosFormControl";
 
 interface IPhotosProps {
     photos: IPhotoState;
-    getAll: (limit: number, offset: number) => void;
+    requestApiPhotos: (
+        limit: number, offset: number, query?: string, category?: string[],
+        sortAsc?: boolean, widescreen?: boolean
+    ) => void;
 }
 
-class Photos extends React.Component<IPhotosProps & WithStyles<typeof styles>> {
+interface IPhotosState  {
+    limit: number;
+    offset: number;
+    query?: string;
+    sortAsc?: boolean;
+    category?: string[];
+    widescreen?: boolean;
+}
+
+class Photos extends React.Component<IPhotosProps & WithWidthProps, IPhotosState> {
     static mapStateToProps(store: IApplicationStore) {
         return { photos: store.photos };
     }
 
     static mapDispatchToProps(dispatch: PhotoThunkDispatch) {
         return {
-            getAll: (limit: number, offset: number) =>
-                dispatch(getAll(limit, offset))
+            requestApiPhotos: (
+                limit: number, offset: number, query?: string, category?: string[],
+                sortAsc?: boolean, widescreen?: boolean
+            ) => dispatch(getAll(limit, offset, query, category, sortAsc, widescreen))
         };
     }
 
+    state: IPhotosState = {
+        limit: 12,
+        offset: 0
+    };
+
     componentDidMount() {
-        this.props.getAll(10, 0);
+        this.props.requestApiPhotos(this.state.limit, 0);
+    }
+
+    gridPhotosCols = () => {
+        const width = this.props.width!;
+        if (isWidthUp("xl", width)) {
+           return 4;
+        } else if (isWidthUp("lg", width)) {
+            return 3;
+        } else if (isWidthUp("sm", width)) {
+            return 2;
+        }
+        return 1;
+    }
+
+    changePage = (offset: number) => {
+        const newState = { ...this.state, offset };
+        this.upadatePhotos(newState);
+        this.setState(newState);
+    }
+
+    upadatePhotos = (state: IPhotosState) => {
+        const { limit, offset, query, sortAsc, category, widescreen } = state;
+        this.props.requestApiPhotos(limit, offset, query, category, sortAsc, widescreen);
     }
 
     render() {
-        const { classes } = this.props;
+        const { gridPhotosCols, changePage } = this;
+        const { offset, limit, total, isFetching } = this.props.photos;
+        const { requestApiPhotos } = this.props;
         return (
-            <div className={classes.root}>
-                <GridList cellHeight={180} className={classes.gridList}>
-                <GridListTile key="Subheader" cols={2} style={{ height: "auto" }}>
-                    <ListSubheader component="div">December</ListSubheader>
-                </GridListTile>
-                {this.props.photos.photoArray && this.props.photos.photoArray.map((tile) => (
-                    <GridListTile key={tile.url}>
-                        <img src={tile.url} alt={tile.name} />
-                        <GridListTileBar
-                            title={tile.name}
-                            subtitle={<span>by: {tile.description}</span>}
-                            actionIcon={
-                            <IconButton aria-label={`info about ${tile.name}`} className={classes.icon}>
-                                <InfoIcon />
-                            </IconButton>
-                            }
-                        />
-                    </GridListTile>
-                ))}
-                </GridList>
-            </div>
+            <>
+                <PhotosFormControl limit={limit} apiRequestToPhotos={requestApiPhotos} />
+                <div className="photos">
+                    {this.props.photos.photoArray &&
+                        <GridList className="photos__grid" cols={gridPhotosCols()} cellHeight={220}>
+                            {this.props.photos.photoArray.map((tile, i) => (
+                                <GridListTile key={i} className="photo-card">
+                                    <img src={tile.url} alt={tile.name} />
+                                    <GridListTileBar
+                                        className="photo-card__title"
+                                        title={tile.name}
+                                        subtitle={<span>by: {tile.description}</span>}
+                                        actionIcon={
+                                            <div className="photo-card__icon">
+                                                <IconButton
+                                                    aria-label={`info about ${tile.name}`}
+                                                    color="inherit"
+                                                >
+                                                    <InfoIcon />
+                                                </IconButton>
+                                            </div>
+                                        }
+                                    />
+                                </GridListTile>
+                            ))}
+                        </GridList>
+                    }
+                </div>
+                <Pagination
+                    isDisabled={isFetching}
+                    cbPageChanged={changePage}
+                    total={total}
+                    limit={limit}
+                    offset={offset}
+                    textDescription={["photo", "photos"]}
+                />
+            </>
         );
     }
 }
 
 export default connect(Photos.mapStateToProps, Photos.mapDispatchToProps)
-    (withStyles(styles)(Photos));
+    (withWidth({ withTheme: true })(Photos));

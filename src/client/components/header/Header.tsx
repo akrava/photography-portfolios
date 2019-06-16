@@ -7,6 +7,7 @@ import { WithStyles, withStyles, createStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { IApplicationStore } from "@configs/configureReduxStore";
 import { IUserState } from "@actions/user";
+import { IPhotoState } from "@actions/photo";
 import Menu from "@components/header/Menu";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import MenuItem from "@components/header/MenuItem";
@@ -50,11 +51,12 @@ const styles = () => createStyles({
 
 interface IHeaderProps {
     user: IUserState;
+    photos: IPhotoState;
 }
 
 class Header extends React.Component<IHeaderProps & WithStyles<typeof styles>> {
     static mapStateToProps(store: IApplicationStore) {
-        return { user: store.user };
+        return { user: store.user, photos: store.photos };
     }
 
     state = {
@@ -118,6 +120,7 @@ class Header extends React.Component<IHeaderProps & WithStyles<typeof styles>> {
         const { drawerIsOpened } = this.state;
         const { root, buttonMenu } = this.props.classes;
         const { isFetching, isLogined, userObject } = this.props.user;
+        const photosFetching = this.props.photos.isFetching;
         return (
             <AppBar className={classNames(root, "header")} position="sticky">
                 <Toolbar>
@@ -163,7 +166,7 @@ class Header extends React.Component<IHeaderProps & WithStyles<typeof styles>> {
                         : renderLoginGroup()
                     }
                 </Toolbar>
-                {isFetching &&
+                {(isFetching || photosFetching) &&
                     <div className="header__loading-strip">
                         <LinearProgress />
                     </div>

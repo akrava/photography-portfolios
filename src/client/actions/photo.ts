@@ -23,13 +23,15 @@ export interface IPhotoState {
     photoArray: IPhotoObject[] | null;
     total: number;
     limit: number;
+    offset: number;
 }
 
 export const defaultPayload: IPhotoState = {
     isFetching: false,
     photoArray: null,
     total: 0,
-    limit: 0
+    limit: 0,
+    offset: 0
 };
 
 export interface IPhotoActions {
@@ -40,19 +42,21 @@ export interface IPhotoActions {
 type PhotoResult<TResult> = ThunkAction<
     TResult, IPhotoState, undefined, IPhotoActions | IShowMessageActions
 >;
+
 export type PhotoThunkDispatch = ThunkDispatch<
 IPhotoState, undefined, IPhotoActions | IShowMessageActions
 >;
 
 export function getAll(
-    limit: number, offset: number
+    limit: number, offset: number, query?: string, category?: string[],
+    sortAsc?: boolean, widescreen?: boolean
 ): PhotoResult<void> {
     return async function(dispatch) {
         dispatch({
             type: PHOTO_GET_ALL_REQUEST,
             payload: { ...defaultPayload, isFetching: true }
         });
-        const response = await Photo.getAll(limit, offset);
+        const response = await Photo.getAll(limit, offset, query, category, sortAsc, widescreen);
         if (response.error !== null) {
             dispatch(showMessage(`Couldn't load photos: ${response.error!.message}`, "error"));
             dispatch({
@@ -63,7 +67,13 @@ export function getAll(
         }
         dispatch({
             type: PHOTO_GET_ALL_SUCCESS,
-            payload: { ...defaultPayload, photoArray: response.respBody.items, total: response.respBody.total },
+            payload: {
+                ...defaultPayload,
+                photoArray: response.respBody.items,
+                total: response.respBody.total,
+                limit: response.respBody.limit,
+                offset: response.respBody.offset
+            }
         });
     };
 }

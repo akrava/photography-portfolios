@@ -22,7 +22,10 @@ export default function userReducer(state = initialState, action: IPhotoActions)
             return {
                 ...state,
                 isFetching: data.isFetching,
-                photoArray: data.photoArray
+                photoArray: data.photoArray,
+                total: data.total,
+                limit: data.limit,
+                offset: data.offset
             };
         }
         default: {

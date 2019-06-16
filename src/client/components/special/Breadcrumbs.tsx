@@ -25,7 +25,7 @@ class Breadcrumbs extends React.Component<InjectedProps> {
                 {breadcrumbs.map(({ match, breadcrumb }, i) => {
                     if (i === 0) {
                         return (
-                            <Link className="breadcrumbs__link" color="inherit" to="/">
+                            <Link key={i} className="breadcrumbs__link" color="inherit" to="/">
                                 <HomeIcon className="breadcrumbs__home-icon" />
                             </Link>
                         );
@@ -33,7 +33,7 @@ class Breadcrumbs extends React.Component<InjectedProps> {
                         return breadcrumb;
                     } else {
                         return (
-                            <Link className="breadcrumbs__link" to={match.url}>
+                            <Link key={i} className="breadcrumbs__link" to={match.url}>
                                 {breadcrumb}
                             </Link>
                         );

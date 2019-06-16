@@ -37,7 +37,7 @@ const PhotoModel = Mongoose.model<IPhotoModel>("Photo", PhotoScheme) as IPaginat
 
 class Photo {
     static async getAll(
-        offset = 0, limit = -1, sortAsc = false, query?: string, category?: string,
+        offset = 0, limit = -1, sortAsc?: boolean, query?: string, category?: string[],
         widescreen?: boolean, owner?: string
     ) {
         const filterParamObject: {[k: string]: any} = {};
@@ -48,26 +48,29 @@ class Photo {
             filterParamObject.wide_screen = widescreen;
         }
         if (category) {
-            filterParamObject.category = category;
+            filterParamObject.category = { $in: category };
         }
         if (query) {
-            filterParamObject.$text = { $search: query };
+            const regexp = new RegExp(query, "i");
+            filterParamObject.$or = [
+                { name: { $regex: regexp } }, { description: { $regex: regexp } }
+            ];
         }
-        // const limitProp = limit <= 0 ? 10 : limit;
-        limit = limit ? -1 : 0;
+        limit = limit <= 0 ? 10 : limit;
         offset = offset < 0 ? 0 : offset;
-        const result = await PhotoModel.paginate(filterParamObject, {
-            offset, limit: 10, sort: { date_added: sortAsc ? "asc" : "desc" }
-        });
+        const sort = typeof sortAsc === "boolean"
+            ? { date_added: sortAsc ? "asc" : "desc" }
+            : undefined;
+        console.log(filterParamObject, sort);
+        const result = await PhotoModel.paginate(filterParamObject, { offset, limit, sort });
         if (result !== null) {
             const items = result.docs.map((x) => new Photo(
                 x.id, x.uniqueNum, x.url, x.name, x.description, x.price, x.owner_id.toHexString(),
                 x.wide_screen, x.date_added, x.category
             ));
-            // console.log(limitProp);
             return {
                 items,
-                total: result.total,
+                total: result.totalDocs,
                 limit: result.limit,
                 offset: result.offset,
             };
