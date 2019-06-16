@@ -83,7 +83,7 @@ class PhotosFormControl extends React.Component<IPhotosFormProps & WithStyles<ty
             window.setTimeout(() => {
                 const lastChanges = this.state.stack.pop();
                 if (lastChanges) {
-                    this.requestToApi(newState);
+                    this.requestToApi(this.state);
                 }
                 this.setState({ enablePost: true, stack: [] });
             }, 1000);
