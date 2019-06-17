@@ -17,6 +17,18 @@ html, body {
     }
 }
 
+.text-info {
+    margin: auto 0;
+    font-size: 1.5rem;
+}
+
+.heading {
+    font-family: "Roboto", "Segoe UI", Arial, sans-serif;
+    font-weight: 300;
+    font-size: 3rem;
+    color: #551a8b;
+}
+
 .button-plain__wrapper {
     height: inherit;
     display: inline-block;
@@ -116,4 +128,27 @@ html, body {
 .input-item__chip-group {
     display: flex;
     justify-content: center;
+}
+
+.loading-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    transition: opacity ease-in-out 1s;
+    font-size: 2rem;
+
+    &_inactive {
+        opacity: 0;
+    }
+
+    &_disabled {
+        display: none;
+    }
 }

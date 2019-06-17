@@ -10,6 +10,8 @@ import IconButton from "@material-ui/core/IconButton";
 import InfoIcon from "@material-ui/icons/Info";
 import Pagination from "@components/controls/Pagination";
 import PhotosFormControl from "@components/photos/PhotosFormControl";
+import LoadingSplashScreen from "@components/special/LoadingSplashScreen";
+import Typography from "@material-ui/core/Typography";
 
 interface IPhotosProps {
     photos: IPhotoState;
@@ -26,6 +28,7 @@ interface IPhotosState  {
     sortAsc?: boolean;
     category?: string[];
     widescreen?: boolean;
+    loadedImages: boolean[] | null;
 }
 
 class Photos extends React.Component<IPhotosProps & WithWidthProps, IPhotosState> {
@@ -44,7 +47,8 @@ class Photos extends React.Component<IPhotosProps & WithWidthProps, IPhotosState
 
     state: IPhotosState = {
         limit: 12,
-        offset: 0
+        offset: 0,
+        loadedImages: null
     };
 
     componentDidMount() {
@@ -64,7 +68,7 @@ class Photos extends React.Component<IPhotosProps & WithWidthProps, IPhotosState
     }
 
     changePage = (offset: number) => {
-        const newState = { ...this.state, offset };
+        const newState = { ...this.state, offset, loadedImages: null };
         this.upadatePhotos(newState);
         this.setState(newState);
     }
@@ -72,21 +76,62 @@ class Photos extends React.Component<IPhotosProps & WithWidthProps, IPhotosState
     upadatePhotos = (state: IPhotosState) => {
         const { limit, offset, query, sortAsc, category, widescreen } = state;
         this.props.requestApiPhotos(limit, offset, query, category, sortAsc, widescreen);
+        this.jumpToTop("photos-gallarey");
+    }
+
+    jumpToTop(id: string) {
+        const el = document.getElementById(id);
+        if (el) {
+            window.scrollTo(0, el.offsetTop);
+        }
+    }​
+
+    handleLoadImage = (i: number) => {
+        let { loadedImages } = this.state;
+        const { photoArray } = this.props.photos;
+        if (!photoArray) {
+            return;
+        }
+        if (!loadedImages) {
+           loadedImages = new Array(photoArray.length).fill(false);
+        }
+        loadedImages[i] = true;
+        this.setState({
+            loadedImages
+        });
     }
 
     render() {
-        const { gridPhotosCols, changePage } = this;
-        const { offset, limit, total, isFetching } = this.props.photos;
+        const { gridPhotosCols, changePage, handleLoadImage } = this;
+        const { offset, limit, total, isFetching, photoArray } = this.props.photos;
         const { requestApiPhotos } = this.props;
+        const { loadedImages } = this.state;
         return (
             <>
-                <PhotosFormControl limit={limit} apiRequestToPhotos={requestApiPhotos} />
+                <h1 className="heading" id="photos-gallarey">
+                    Photos
+                </h1>
+                <Typography variant="body1">
+                    Here you can see all photos in our database. To see more details about some
+                    image, press info button. Here you also can filter and sort this images by
+                    many criterias.
+                </Typography>
+                <PhotosFormControl
+                    limit={limit}
+                    apiRequestToPhotos={requestApiPhotos}
+                    className="photos__controls"
+                />
                 <div className="photos">
-                    {this.props.photos.photoArray &&
+                    {photoArray && photoArray.length > 0
+                        ?
                         <GridList className="photos__grid" cols={gridPhotosCols()} cellHeight={220}>
-                            {this.props.photos.photoArray.map((tile, i) => (
+                            {photoArray.map((tile, i) => (
                                 <GridListTile key={i} className="photo-card">
-                                    <img src={tile.url} alt={tile.name} />
+                                    <img
+                                        src={tile.url}
+                                        alt={tile.name}
+                                        onLoad={() => handleLoadImage(i)}
+                                    />
                                     <GridListTileBar
                                         className="photo-card__title"
                                         title={tile.name}
@@ -105,7 +150,17 @@ class Photos extends React.Component<IPhotosProps & WithWidthProps, IPhotosState
                                 </GridListTile>
                             ))}
                         </GridList>
+                        :
+                        <p className="text-info">
+                            There are no images with such conditions
+                        </p>
                     }
+                    <LoadingSplashScreen
+                        isLoading={
+                            isFetching || loadedImages === null ||
+                            (loadedImages !== null && loadedImages.some((x) => x === false))
+                        }
+                    />
                 </div>
                 <Pagination
                     isDisabled={isFetching}

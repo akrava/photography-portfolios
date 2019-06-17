@@ -23,6 +23,7 @@ interface IPhotosFormProps {
         sortAsc?: boolean, widescreen?: boolean
     ) => void;
     limit: number;
+    className?: string;
 }
 
 export interface IPhotosFormState {
@@ -95,8 +96,9 @@ class PhotosFormControl extends React.Component<IPhotosFormProps & WithStyles<ty
         const { query, sort, aspect, categories } = this.state;
         const { handleFieldChange, handleMultipleChange, MenuProps } = this;
         const { chip } = this.props.classes;
+        const { className } = this.props;
         return (
-            <form>
+            <form className={className}>
                 <Grid container={true} spacing={3}>
                     <Grid item={true} xl={6} lg={5} sm={12} xs={12}>
                         <TextField

@@ -4,6 +4,8 @@
     justify-content: space-around;
     overflow: hidden;
     margin: 1rem auto;
+    position: relative;
+    min-height: 13rem;
 }
 
 .photo-card__icon {
@@ -32,4 +34,8 @@ $photo-card-title-hegight: 4.5rem;
 
 .photos__grid {
     width: 100%;
+}
+
+.photos__controls {
+    margin: 1.5rem 0;
 }
