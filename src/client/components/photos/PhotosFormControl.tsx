@@ -40,7 +40,7 @@ class PhotosFormControl extends React.Component<IPhotosFormProps & WithStyles<ty
         aspect: "",
         sort: "",
         enablePost: true,
-        stack: [] as IPhotosFormState[]
+        wasChanged: false
     };
 
     MenuProps: Partial<MenuPropsType> = {
@@ -70,23 +70,23 @@ class PhotosFormControl extends React.Component<IPhotosFormProps & WithStyles<ty
         const widescreen = aspect === "" || aspect === "All"
             ? undefined
             : state.aspect === "16:9";
+        if (query && query.length < 2 && query.length !== 0) {
+            return;
+        }
         this.props.apiRequestToPhotos(limit, 0, query, categories, sortAsc, widescreen);
     }
 
     handleChange = (state: IPhotosFormState) => {
-        let newState = { ...state, enablePost: false, stack: this.state.stack };
+        let newState = { ...state, enablePost: false, wasChanged: this.state.wasChanged };
         if (!this.state.enablePost) {
-            const stack = this.state.stack;
-            stack.push(newState);
-            newState = { ...newState, stack };
+            newState = { ...newState, wasChanged: true };
         } else {
             this.requestToApi(newState);
             window.setTimeout(() => {
-                const lastChanges = this.state.stack.pop();
-                if (lastChanges) {
+                if (this.state.wasChanged) {
                     this.requestToApi(this.state);
                 }
-                this.setState({ enablePost: true, stack: [] });
+                this.setState({ enablePost: true, wasChanged: false });
             }, 1000);
         }
         this.setState(newState);

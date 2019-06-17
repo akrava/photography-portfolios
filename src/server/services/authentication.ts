@@ -1,3 +1,4 @@
+import Passport from "passport";
 import Express from "express";
 import User from "@models/user";
 import { VerifyCallback } from "passport-jwt";
@@ -25,6 +26,18 @@ export const getUserFromToken: VerifyCallback = async (jwtPayload, cb) => {
         cb(null, user);
     }
 };
+
+export function authenticate(
+    req: Express.Request,
+    res: Express.Response,
+    next: Express.NextFunction
+) {
+    if (!req.user) {
+        const jwtAuthMiddleware = Passport.authenticate("jwt", { session: false });
+        return jwtAuthMiddleware(req, res, next);
+    }
+    next();
+}
 
 // async function verifiyUserFunction(username, password, done) {
 //     let user = null;

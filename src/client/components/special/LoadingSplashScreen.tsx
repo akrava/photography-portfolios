@@ -25,7 +25,6 @@ class LoadingSplashScreen extends React.Component<ILoadingSplashScreenProps> {
 
     render() {
         const { text, isLoading } = this.props;
-        console.log(this.state);
         return (
             <div
                 className={classNames("loading-wrapper", this.getCurrentClassName(isLoading))}

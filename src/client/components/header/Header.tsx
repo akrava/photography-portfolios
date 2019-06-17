@@ -100,7 +100,10 @@ class Header extends React.Component<IHeaderProps & WithStyles<typeof styles>> {
     }
 
     renderUserProfile = () => {
-        const { fullname, avaUrl } = this.props.user.userObject!;
+        if (!this.props.user.userObject) {
+            return null;
+        }
+        const { fullname, avaUrl } = this.props.user.userObject;
         return (
             <div className="header__login-group">
                 <MenuItem

@@ -23,7 +23,7 @@ const PhotoScheme = new Mongoose.Schema({
     name:        { type: String, required: true },
     description: { type: String, required: true },
     price:       { type: Number, required: true },
-    owner_id:    { type: Mongoose.Types.ObjectId, required: true },
+    owner_id:    { type: Mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
     wide_screen: { type: Boolean, required: true },
     date_added:  { type: Date,   default: Date.now() },
     category:    { type: String, required: true, enum: [ "photo", "art", "design" ] }
@@ -80,8 +80,8 @@ class Photo {
 
     static async getByNumber(uniqueNum: number) {
         const model = await PhotoModel.find({ uniqueNum });
-        if (!model) {
-            throw Error("Couldn't fetch all photos");
+        if (!model || !model[0]) {
+            return null;
         }
         const { id, url, name, description, price, owner_id, wide_screen,
             date_added, category } = model[0];

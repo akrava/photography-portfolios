@@ -4,7 +4,7 @@ import Photo from "@models/photo";
 const router = Express.Router();
 
 router.get("/", async (req, res) => {
-    if (!req.params) {
+    if (!req.query) {
         res.status(400).send({ err: "Invalid request data in body" });
         return;
     }
@@ -25,6 +25,26 @@ router.get("/", async (req, res) => {
         return;
     }
     res.send(photos);
+});
+
+router.get("/:number(\\d+)", async (req, res) => {
+    if (!req.params) {
+        res.status(400).send({ err: "Invalid request data in body" });
+        return;
+    }
+    const number = Number.parseInt(req.params.number, 10);
+    let photo;
+    try {
+        photo = await Photo.getByNumber(number);
+    } catch (e) {
+        res.status(400).send({ err: e.toString() });
+        return;
+    }
+    if (photo === null) {
+        res.send(404);
+        return;
+    }
+    res.send(photo);
 });
 
 function stringToBoolean(val: string) {

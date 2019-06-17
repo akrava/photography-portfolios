@@ -67,7 +67,7 @@
     border-radius: 50%;
     cursor: pointer;
     box-shadow: 0 0 3px #fff;
-    transition: background-color 0.45s ease-out;
+    transition: background-color, box-shadow 0.45s linear;
 
     + .breadcrumbs__point {
         margin-left: 1rem;
@@ -75,7 +75,7 @@
 }
 
 .breadcrumbs__point_active {
-    background: #0f0335cc;
+    background: #102c7acc;
 }
 
 .slider__breadcrumbs {

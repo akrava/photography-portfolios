@@ -1,24 +1,23 @@
 import React from "react";
 import { connect } from "react-redux";
 import withWidth, { WithWidthProps, isWidthUp } from "@material-ui/core/withWidth";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import { IApplicationStore } from "@configs/configureReduxStore";
 import { getAll, IPhotoState, PhotoThunkDispatch } from "@actions/photo";
-import GridList from "@material-ui/core/GridList";
-import GridListTile from "@material-ui/core/GridListTile";
-import GridListTileBar from "@material-ui/core/GridListTileBar";
-import IconButton from "@material-ui/core/IconButton";
-import InfoIcon from "@material-ui/icons/Info";
 import Pagination from "@components/controls/Pagination";
 import PhotosFormControl from "@components/photos/PhotosFormControl";
 import LoadingSplashScreen from "@components/special/LoadingSplashScreen";
 import Typography from "@material-ui/core/Typography";
+import PhotoCards from "@components/photos/PhotoCards";
+
+type requestPhotosType = (
+    limit: number, offset: number, query?: string, category?: string[],
+    sortAsc?: boolean, widescreen?: boolean
+) => void;
 
 interface IPhotosProps {
     photos: IPhotoState;
-    requestApiPhotos: (
-        limit: number, offset: number, query?: string, category?: string[],
-        sortAsc?: boolean, widescreen?: boolean
-    ) => void;
+    requestApiPhotos: requestPhotosType;
 }
 
 interface IPhotosState  {
@@ -28,10 +27,11 @@ interface IPhotosState  {
     sortAsc?: boolean;
     category?: string[];
     widescreen?: boolean;
-    loadedImages: boolean[] | null;
 }
 
-class Photos extends React.Component<IPhotosProps & WithWidthProps, IPhotosState> {
+class Photos extends React.Component<
+    IPhotosProps & WithWidthProps & RouteComponentProps, IPhotosState
+> {
     static mapStateToProps(store: IApplicationStore) {
         return { photos: store.photos };
     }
@@ -47,8 +47,7 @@ class Photos extends React.Component<IPhotosProps & WithWidthProps, IPhotosState
 
     state: IPhotosState = {
         limit: 12,
-        offset: 0,
-        loadedImages: null
+        offset: 0
     };
 
     componentDidMount() {
@@ -68,13 +67,14 @@ class Photos extends React.Component<IPhotosProps & WithWidthProps, IPhotosState
     }
 
     changePage = (offset: number) => {
-        const newState = { ...this.state, offset, loadedImages: null };
+        const newState = { ...this.state, offset };
         this.upadatePhotos(newState);
         this.setState(newState);
     }
 
     upadatePhotos = (state: IPhotosState) => {
-        const { limit, offset, query, sortAsc, category, widescreen } = state;
+        const { limit, offset } = state;
+        const { query, category, sortAsc, widescreen } = this.props.photos;
         this.props.requestApiPhotos(limit, offset, query, category, sortAsc, widescreen);
         this.jumpToTop("photos-gallarey");
     }
@@ -82,36 +82,21 @@ class Photos extends React.Component<IPhotosProps & WithWidthProps, IPhotosState
     jumpToTop(id: string) {
         const el = document.getElementById(id);
         if (el) {
-            window.scrollTo(0, el.offsetTop);
+            el.scrollIntoView({ behavior: "smooth" });
         }
     }​
 
-    handleLoadImage = (i: number) => {
-        let { loadedImages } = this.state;
-        const { photoArray } = this.props.photos;
-        if (!photoArray) {
-            return;
-        }
-        if (!loadedImages) {
-           loadedImages = new Array(photoArray.length).fill(false);
-        }
-        loadedImages[i] = true;
-        this.setState({
-            loadedImages
-        });
-    }
-
     render() {
-        const { gridPhotosCols, changePage, handleLoadImage } = this;
+        const { gridPhotosCols, changePage } = this;
         const { offset, limit, total, isFetching, photoArray } = this.props.photos;
         const { requestApiPhotos } = this.props;
-        const { loadedImages } = this.state;
+        const { push } = this.props.history;
         return (
             <>
-                <h1 className="heading" id="photos-gallarey">
+                <h1 className="heading">
                     Photos
                 </h1>
-                <Typography variant="body1">
+                <Typography className="body-text" variant="body1" id="photos-gallarey">
                     Here you can see all photos in our database. To see more details about some
                     image, press info button. Here you also can filter and sort this images by
                     many criterias.
@@ -124,42 +109,19 @@ class Photos extends React.Component<IPhotosProps & WithWidthProps, IPhotosState
                 <div className="photos">
                     {photoArray && photoArray.length > 0
                         ?
-                        <GridList className="photos__grid" cols={gridPhotosCols()} cellHeight={220}>
-                            {photoArray.map((tile, i) => (
-                                <GridListTile key={i} className="photo-card">
-                                    <img
-                                        src={tile.url}
-                                        alt={tile.name}
-                                        onLoad={() => handleLoadImage(i)}
-                                    />
-                                    <GridListTileBar
-                                        className="photo-card__title"
-                                        title={tile.name}
-                                        subtitle={<span>by: {tile.description}</span>}
-                                        actionIcon={
-                                            <div className="photo-card__icon">
-                                                <IconButton
-                                                    aria-label={`info about ${tile.name}`}
-                                                    color="inherit"
-                                                >
-                                                    <InfoIcon />
-                                                </IconButton>
-                                            </div>
-                                        }
-                                    />
-                                </GridListTile>
-                            ))}
-                        </GridList>
+                            <PhotoCards
+                                cellHeight={220}
+                                cols={gridPhotosCols()}
+                                images={photoArray}
+                                goToPage={push}
+                            />
                         :
-                        <p className="text-info">
-                            There are no images with such conditions
-                        </p>
+                            <p className="text-info">
+                                There are no images with such conditions
+                            </p>
                     }
                     <LoadingSplashScreen
-                        isLoading={
-                            isFetching || loadedImages === null ||
-                            (loadedImages !== null && loadedImages.some((x) => x === false))
-                        }
+                        isLoading={isFetching}
                     />
                 </div>
                 <Pagination
@@ -176,4 +138,4 @@ class Photos extends React.Component<IPhotosProps & WithWidthProps, IPhotosState
 }
 
 export default connect(Photos.mapStateToProps, Photos.mapDispatchToProps)
-    (withWidth({ withTheme: true })(Photos));
+    (withWidth({ withTheme: true })(withRouter(Photos)));

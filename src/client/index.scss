@@ -29,6 +29,10 @@ html, body {
     color: #551a8b;
 }
 
+.body-text {
+    text-align: justify;
+}
+
 .button-plain__wrapper {
     height: inherit;
     display: inline-block;
@@ -36,13 +40,13 @@ html, body {
 
 .container {
     width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
+    padding-right: $padding-container;
+    padding-left: $padding-container;
     margin-right: auto;
     margin-left: auto;
 
     @media (min-width: $sm) {
-        max-width: 540px;
+        max-width: $max-width-container-sm;
     }
     @media (min-width: $md) {
         max-width: 720px;

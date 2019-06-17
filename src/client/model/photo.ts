@@ -36,6 +36,26 @@ class Photo {
         }
         return new Response(statusCode!, respBody, error);
     }
+
+    static async getByNumber(number: number) {
+        let statusCode: number;
+        let error = null;
+        let respBody;
+        try {
+            const response = await fetch(`/api/v1/photo/${number}`);
+            statusCode = response.status;
+            respBody = await response.json();
+            if (response.status === 404) {
+                return new Response(response.status, null, respBody);
+            }
+            if (!response.ok || response.status !== 200) {
+                throw new Error(respBody.err ? respBody.err : `${response.status} code`);
+            }
+        } catch (e) {
+            error = e;
+        }
+        return new Response(statusCode!, respBody, error);
+    }
 }
 
 export default Photo;

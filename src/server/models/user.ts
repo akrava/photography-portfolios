@@ -1,4 +1,5 @@
 import Mongoose from "mongoose";
+import Photo from "@models/photo";
 
 export interface IUserModel extends Mongoose.Document {
     login: string;
@@ -7,15 +8,17 @@ export interface IUserModel extends Mongoose.Document {
     fullname: string;
     registered: Date;
     avaUrl: string;
+    ordered_photos: Mongoose.Schema.Types.ObjectId[];
 }
 
 const UserScheme = new Mongoose.Schema({
-    login:      { type: String, required: true, unique: true },
-    password:   { type: String, required: true },
-    role:       { type: Number, required: true },
-    fullname:   { type: String, required: true },
-    registered: { type: Date,   default: Date.now() },
-    avaUrl:     { type: String, default: "/userpic.png" },
+    login:          { type: String, required: true, unique: true },
+    password:       { type: String, required: true },
+    role:           { type: Number, required: true },
+    fullname:       { type: String, required: true },
+    registered:     { type: Date,   default: Date.now(), required: true },
+    avaUrl:         { type: String, default: "/userpic.png", required: true },
+    ordered_photos: [{ type: Mongoose.Schema.Types.ObjectId, ref: "Photo" }]
 });
 
 const UserModel = Mongoose.model<IUserModel>("User", UserScheme);
@@ -37,6 +40,21 @@ class User {
         return new User(
             id, login, password, role, fullname, registered, avaUrl
         );
+    }
+
+    static async getAllOrderedImages(id: string) {
+        const model = await UserModel.findById(id).populate("ordered_photos");
+        return model || null;
+    }
+
+    static async orderPhoto(idUser: string, numPhoto: number) {
+        const model = await Photo.getByNumber(numPhoto);
+        if (!model) {
+            return null;
+        }
+        const property = { $push: { ordered_photos: model.id } };
+        await UserModel.findByIdAndUpdate(idUser, property);
+        return await User.getAllOrderedImages(idUser);
     }
 
     static async getByLogin(login: string) {

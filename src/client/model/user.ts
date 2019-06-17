@@ -1,4 +1,5 @@
 import Response from "@model/response";
+import { Configs } from "@configs/general";
 
 class User {
     static async create(
@@ -23,6 +24,38 @@ class User {
             error = e;
         }
         return new Response(statusCode!, null, error);
+    }
+
+    static async getOrderedPhotos() {
+        return await User.authRequest("/api/v1/user/me/ordered-photos");
+    }
+
+    static async orderedPhoto(number: number) {
+        return await User.authRequest(
+            `/api/v1/user/me/ordered-photos/${number}`, true, 201
+        );
+    }
+
+    static async authRequest(path: string, post = false, returnStat = 200) {
+        let statusCode: number;
+        let error = null;
+        let resp;
+        try {
+            let headers: RequestInit = Configs.authorizationHeaders();
+            if (post === true) {
+                headers = { ...headers, method: "POST" };
+            }
+            const response = await fetch(path, headers);
+            statusCode = response.status;
+            resp = await response.json();
+            console.log(resp);
+            if (!response.ok || response.status !== returnStat) {
+                throw new Error(resp.err ? resp.err : `${response.status} code`);
+            }
+        } catch (e) {
+            error = e;
+        }
+        return new Response(statusCode!, resp, error);
     }
 
     static async authenticate(username: string, password: string) {
