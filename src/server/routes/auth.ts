@@ -2,7 +2,7 @@ import { Enviroment } from "@configs/enviroment";
 import Express from "express";
 import jwt from "jsonwebtoken";
 import User from "@models/user";
-import { cleanSensetiveUserInfo, sha512, roleUser } from "@services/authentication";
+import { cleanSensetiveUserInfo, sha512 } from "@services/authentication";
 
 const router = Express.Router();
 
@@ -27,8 +27,10 @@ router.post("/register", async (req, res) => {
         res.status(400).send({ err: "Invalid fullname." });
         return;
     }
+    const isPhotographer = req.body.isPhotographer === true;
     const user = new User(
-        "", login, sha512(password, Enviroment.PasswordSalt!), roleUser, fullname
+        "", login, sha512(password, Enviroment.PasswordSalt!), "photographer",
+        !isPhotographer, fullname
     );
     let createdUser;
     try {

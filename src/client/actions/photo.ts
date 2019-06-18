@@ -59,7 +59,7 @@ IPhotoState, undefined, IPhotoActions | IShowMessageActions
 
 export function getAll(
     limit: number, offset: number, query?: string, category?: string[],
-    sortAsc?: boolean, widescreen?: boolean
+    sortAsc?: boolean, widescreen?: boolean, owner?: string
 ): PhotoResult<void> {
     return async function(dispatch) {
         dispatch({
@@ -73,7 +73,9 @@ export function getAll(
                 widescreen
             }
         });
-        const response = await Photo.getAll(limit, offset, query, category, sortAsc, widescreen);
+        const response = await Photo.getAll(
+            limit, offset, query, category, sortAsc, widescreen, owner
+        );
         if (response.error !== null) {
             dispatch(showMessage(`Couldn't load photos: ${response.error!.message}`, "error"));
             dispatch({

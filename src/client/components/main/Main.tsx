@@ -10,6 +10,8 @@ import Logout from "@components/routes/Logout";
 import Breadcrumbs from "@components/special/Breadcrumbs";
 import Photos from "@routes/Photos";
 import Photo from "@routes/Photo";
+import Portfolios from "@routes/Portfolios";
+import Portfolio from "@routes/Portfolio";
 import ErrorBoundary from "@components/service/ErrorBoundary";
 
 class Main extends React.Component {
@@ -27,7 +29,17 @@ class Main extends React.Component {
                         <Route exact={true} path="/contact" component={Contact} />
                         <Route exact={true} path="/logout" component={Logout} />
                         <Route path="/photos" exact={true} component={Photos} />
-                        <Route path="/photos/:number(\d{5})" exact={true} component={Photo} />
+                        <Route path="/photos/:number(\d+)" exact={true} component={Photo} />
+                        <Route
+                            path="/portfolios(/photographers|/designers|/artists|)"
+                            exact={true}
+                            component={Portfolios}
+                        />
+                        <Route
+                            path="/portfolio/:login([A-Za-z_0-9]{5,20})"
+                            exact={true}
+                            component={Portfolio}
+                        />
                         <Route component={NotFound} />
                     </Switch>
                 </ErrorBoundary>

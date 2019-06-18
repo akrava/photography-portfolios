@@ -37,7 +37,7 @@ class PhotoCards extends React.Component<IPhotoCardsProps> {
                 <GridListTileBar
                     className="photo-card__title"
                     title={<Link className="link photo-card__link" to={url}>{x.name}</Link>}
-                    subtitle={<span>by: {x.description}</span>}
+                    subtitle={<span>{x.description}</span>}
                     actionIcon={
                         <div className="photo-card__icon">
                             <IconButton

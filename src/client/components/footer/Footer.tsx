@@ -7,8 +7,8 @@ class Footer extends React.Component {
             <Switch>
                 <Route exact={true} path="/(login|register)/" />
                 <Route>
-                    <footer>
-                        <p>
+                    <footer className="footer">
+                        <p className="footer__text">
                             Powered by Arkadiy Krava
                         </p>
                     </footer>

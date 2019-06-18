@@ -3,7 +3,7 @@ import Response from "@model/response";
 class Photo {
     static async getAll(
         limit: number, offset: number, query?: string, category?: string[],
-        sortAsc?: boolean, widescreen?: boolean
+        sortAsc?: boolean, widescreen?: boolean, owner?: string
     ) {
         let statusCode: number;
         let error = null;
@@ -17,6 +17,19 @@ class Photo {
             }
             if (category) {
                 params.append("category", category.join(","));
+            }
+            if (owner) {
+                let id: string;
+                let code = 0;
+                try {
+                    const resp = await fetch(`/api/v1/user/${owner}`);
+                    code = resp.status;
+                    const body = await resp.json();
+                    id = body.id;
+                } catch (e) {
+                    return new Response(code!, respBody, e);
+                }
+                params.append("owner", id);
             }
             if (typeof sortAsc === "boolean") {
                 params.append("sortAsc", sortAsc.toString());

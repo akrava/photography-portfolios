@@ -18,8 +18,9 @@ html, body {
 }
 
 .text-info {
-    margin: auto 0;
+    margin: auto;
     font-size: 1.5rem;
+    text-align: center;
 }
 
 .heading {
@@ -154,5 +155,57 @@ html, body {
 
     &_disabled {
         display: none;
+    }
+}
+
+.home__heading {
+    text-align: center;
+}
+
+.home__text {
+    font-size: 1.3rem;
+    text-align: justify;
+}
+
+.text-muted {
+    font-style: italic;
+    font-size: 70%;
+    color: #5a5a5a;
+}
+
+.leaflet-container {
+    height: 400px;
+    max-width: 800px;
+    margin: 2rem auto;
+}
+
+.about-block__fig {
+    float: left;
+}
+
+.about-block::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.about-block__cap {
+    text-align: center;
+}
+
+.portfolios {
+    position: relative;
+    min-height: 10rem;
+    display: flex;
+}
+
+.footer {
+    color: #1d1c1c;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    border-top: 3px solid #1d0358;
+
+    &__text {
+        text-align: center;
+        font-size: 1.2rem;
     }
 }

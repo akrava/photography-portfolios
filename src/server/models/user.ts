@@ -1,34 +1,77 @@
 import Mongoose from "mongoose";
 import Photo from "@models/photo";
+import mongoosePaginate from "mongoose-paginate-v2";
+
+export type UserCategory = "photographer" | "artist" | "designer";
 
 export interface IUserModel extends Mongoose.Document {
     login: string;
     password: string;
-    role: number;
+    isUserCommon: boolean;
     fullname: string;
     registered: Date;
     avaUrl: string;
     ordered_photos: Mongoose.Schema.Types.ObjectId[];
+    description: string;
+    category: UserCategory;
+    date_free: Date[];
+    date_orderd: Array<{ who: Mongoose.Schema.Types.ObjectId, date: Date }>;
 }
+
+interface IPaginated<T extends Mongoose.Document> extends Mongoose.PaginateModel<T> {}
 
 const UserScheme = new Mongoose.Schema({
     login:          { type: String, required: true, unique: true },
     password:       { type: String, required: true },
-    role:           { type: Number, required: true },
+    isUserCommon:   { type: Boolean, required: true },
     fullname:       { type: String, required: true },
     registered:     { type: Date,   default: Date.now(), required: true },
     avaUrl:         { type: String, default: "/userpic.png", required: true },
-    ordered_photos: [{ type: Mongoose.Schema.Types.ObjectId, ref: "Photo" }]
+    ordered_photos: [{ type: Mongoose.Schema.Types.ObjectId, ref: "Photo" }],
+    description:    { type: String },
+    category:       { type: String, default: "photographer", enum: [ "photographer", "artist", "designer" ] },
+    date_free:      [{ type: Date }],
+    date_orderd:    [{ who: { type: Mongoose.Schema.Types.ObjectId, ref: "User" }, date: { type: Date } }]
 });
 
-const UserModel = Mongoose.model<IUserModel>("User", UserScheme);
+UserScheme.plugin(mongoosePaginate);
+
+const UserModel = Mongoose.model<IUserModel>("User", UserScheme) as IPaginated<IUserModel>;
 
 class User {
-    static async getAll() {
-        const model = await UserModel.find();
-        return model.map((x) => new User(
-            x.id, x.login, x.password, x.role, x.fullname, x.registered, x.avaUrl
-        ));
+    static async getAll(
+        offset = 0, limit = -1, photographers = false, category?: string, query?: string
+    ) {
+        const filterParamObject: {[k: string]: any} = {};
+        if (photographers) {
+            filterParamObject.isUserCommon = false;
+        }
+        if (category) {
+            filterParamObject.category = { $in: category };
+        }
+        if (query) {
+            const regexp = new RegExp(query, "i");
+            filterParamObject.$or = [
+                { fullname: { $regex: regexp } }, { description: { $regex: regexp } }
+            ];
+        }
+        limit = limit <= 0 ? 10 : limit;
+        offset = offset < 0 ? 0 : offset;
+        console.log(filterParamObject);
+        const result = await UserModel.paginate(filterParamObject, { offset, limit });
+        if (result !== null) {
+            const items = result.docs.map((x) => new User(
+                x.id, x.login, x.password, x.category, x.isUserCommon, x.fullname,
+                x.registered, x.avaUrl
+            ));
+            return {
+                items,
+                total: result.totalDocs,
+                limit: result.limit,
+                offset: result.offset,
+            };
+        }
+        throw Error("Couldn't fetch all users");
     }
 
     static async getById(id: string) {
@@ -36,9 +79,9 @@ class User {
         if (!model) {
             return null;
         }
-        const { login, password, role, fullname, registered, avaUrl } = model;
+        const { login, password, category, isUserCommon, fullname, registered, avaUrl } = model;
         return new User(
-            id, login, password, role, fullname, registered, avaUrl
+            id, login, password, category, isUserCommon, fullname, registered, avaUrl
         );
     }
 
@@ -72,7 +115,7 @@ class User {
 
     static async update(x: User) {
         const property = { $set: {
-            role: x.role, fullname: x.fullname, avaUrl: x.avaUrl, password: x.password
+            role: x.isUserCommon, fullname: x.fullname, avaUrl: x.avaUrl, password: x.password
         }};
         UserModel.findByIdAndUpdate(x.id, property);
         return await User.getById(x.id);
@@ -85,7 +128,8 @@ class User {
     id: string;
     login: string;
     password: string;
-    role: number;
+    category: string;
+    isUserCommon: boolean;
     fullname: string;
     registered?: Date;
     avaUrl?: string;
@@ -94,7 +138,8 @@ class User {
         id: string,
         login: string,
         password: string,
-        role: number,
+        category: string,
+        isUserCommon: boolean,
         fullname: string,
         registered?: Date,
         avaUrl?: string
@@ -102,7 +147,8 @@ class User {
         this.id = id;
         this.login = login;
         this.password = password;
-        this.role = role;
+        this.isUserCommon = isUserCommon;
+        this.category = category;
         this.fullname = fullname;
         this.registered = registered;
         this.avaUrl = avaUrl;

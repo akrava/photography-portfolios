@@ -1,5 +1,4 @@
 import { combineReducers, Reducer } from "redux";
-import testReducer from "@reducers/test";
 import userReducer from "@reducers/user";
 import showMessageReducer from "@reducers/showMessage";
 import photoReducer from "@reducers/photo";
@@ -11,7 +10,6 @@ type ObjForCombineReducers = {
 };
 
 const applicationState: ObjForCombineReducers = {
-    test: testReducer,
     user: userReducer,
     systemMessage: showMessageReducer,
     photos: photoReducer

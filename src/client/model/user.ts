@@ -36,6 +36,35 @@ class User {
         );
     }
 
+    static async getPortfolios(
+        limit: number, offset: number, query?: string, category?: string[]
+    ) {
+        let statusCode: number;
+        let error = null;
+        let respBody;
+        try {
+            const params = new URLSearchParams([
+                ["limit", limit.toString()], ["offset", offset.toString()]
+            ]);
+            if (query) {
+                params.append("query", query);
+            }
+            if (category) {
+                params.append("category", category.join(","));
+            }
+            console.log(params.toString());
+            const response = await fetch(`/api/v1/user/portfolios/?${params}`);
+            statusCode = response.status;
+            respBody = await response.json();
+            if (!response.ok || response.status !== 200) {
+                throw new Error(respBody.err ? respBody.err : `${response.status} code`);
+            }
+        } catch (e) {
+            error = e;
+        }
+        return new Response(statusCode!, respBody, error);
+    }
+
     static async authRequest(path: string, post = false, returnStat = 200) {
         let statusCode: number;
         let error = null;
@@ -48,7 +77,6 @@ class User {
             const response = await fetch(path, headers);
             statusCode = response.status;
             resp = await response.json();
-            console.log(resp);
             if (!response.ok || response.status !== returnStat) {
                 throw new Error(resp.err ? resp.err : `${response.status} code`);
             }

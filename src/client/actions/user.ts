@@ -17,6 +17,9 @@ export const USER_PHOTOS_LIST_FETCH_FAILURE = "USER_PHOTOS_LIST_FETCH_FAILURE";
 export const USER_PHOTOS_ORDER_REQUEST      = "USER_PHOTOS_ORDER_REQUEST";
 export const USER_PHOTOS_ORDER_SUCCESS      = "USER_PHOTOS_ORDER_SUCCESS";
 export const USER_PHOTOS_ORDER_FAILURE      = "USER_PHOTOS_ORDER_FAILURE";
+export const GET_PORTFOLIOS_REQUEST         = "GET_PORTFOLIOS_REQUEST";
+export const GET_PORTFOLIOS_SUCCESS         = "GET_PORTFOLIOS_SUCCESS";
+export const GET_PORTFOLIOS_FAILURE         = "GET_PORTFOLIOS_FAILURE";
 
 export interface IUserObject {
     id: string;
@@ -27,18 +30,31 @@ export interface IUserObject {
     registered?: Date;
     avaUrl?: string;
     orderedPhotos?: IPhotoObject[];
+    description: string;
+    category: string;
 }
 
 export interface IUserState {
     isFetching: boolean;
     isLogined: boolean;
     userObject: IUserObject | null;
+    portfolios?: IUserObject[];
+    query: string;
+    category: string[];
+    total: number;
+    limit: number;
+    offset: number;
 }
 
 export const defaultPayload: IUserState = {
     isFetching: false,
     isLogined: false,
-    userObject: null
+    userObject: null,
+    query: "",
+    category: [],
+    total: 0,
+    limit: 0,
+    offset: 0
 };
 
 export interface IUserActions {
@@ -169,6 +185,42 @@ export function orderedPhoto(number: number): UserResult<void> {
                 ...defaultPayload,
                 userObject: userObjectWithPhotos
             },
+        });
+    };
+}
+
+export function getAll(
+    limit: number, offset: number, query?: string, category?: string[],
+): UserResult<void> {
+    return async function(dispatch) {
+        dispatch({
+            type: GET_PORTFOLIOS_REQUEST,
+            payload: {
+                ...defaultPayload,
+                isFetching: true,
+                query: query || "",
+                category: category || []
+            }
+        });
+        console.log("--->", query, category);
+        const response = await User.getPortfolios(limit, offset, query, category);
+        if (response.error !== null) {
+            dispatch(showMessage(`Couldn't load portfolios: ${response.error!.message}`, "error"));
+            dispatch({
+                type: GET_PORTFOLIOS_FAILURE,
+                payload: { ...defaultPayload }
+            });
+            return;
+        }
+        dispatch({
+            type: GET_PORTFOLIOS_SUCCESS,
+            payload: {
+                ...defaultPayload,
+                portfolios: response.respBody.items,
+                total: response.respBody.total,
+                limit: response.respBody.limit,
+                offset: response.respBody.offset
+            }
         });
     };
 }

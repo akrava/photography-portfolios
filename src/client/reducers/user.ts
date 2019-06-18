@@ -12,6 +12,9 @@ import {
     USER_PHOTOS_ORDER_FAILURE,
     USER_PHOTOS_ORDER_REQUEST,
     USER_PHOTOS_ORDER_SUCCESS,
+    GET_PORTFOLIOS_FAILURE,
+    GET_PORTFOLIOS_REQUEST,
+    GET_PORTFOLIOS_SUCCESS,
     defaultPayload,
     IUserActions
 } from "@actions/user";
@@ -21,6 +24,7 @@ const initialState = { ...defaultPayload };
 export default function userReducer(state = initialState, action: IUserActions) {
     const data = action.payload;
     switch (action.type) {
+        case GET_PORTFOLIOS_FAILURE:
         case USER_PHOTOS_LIST_FETCH_REQUEST:
         case USER_PHOTOS_LIST_FETCH_FAILURE:
         case USER_PHOTOS_ORDER_REQUEST:
@@ -65,6 +69,24 @@ export default function userReducer(state = initialState, action: IUserActions) 
                 ...state,
                 isFetching: data.isFetching,
                 userObject
+            };
+        }
+        case GET_PORTFOLIOS_REQUEST: {
+            return {
+                ...state,
+                isFetching: data.isFetching,
+                query: data.query,
+                category: data.category,
+            };
+        }
+        case GET_PORTFOLIOS_SUCCESS: {
+            return {
+                ...state,
+                isFetching: data.isFetching,
+                portfolios: data.portfolios,
+                total: data.total,
+                limit: data.limit,
+                offset: data.offset
             };
         }
         default: {

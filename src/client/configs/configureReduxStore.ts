@@ -1,6 +1,4 @@
-
 import { createStore, applyMiddleware, Action as ActionCommon } from "redux";
-import { ITestState } from "@actions/test";
 import { IUserState } from "@actions/user";
 import { IShowMessageState } from "@actions/showMessage";
 import { IPhotoState } from "@actions/photo";
@@ -23,7 +21,6 @@ export interface IAction<T = unknown> extends ActionCommon  {
 }
 
 export interface IApplicationStore {
-    test: ITestState;
     user: IUserState;
     systemMessage: IShowMessageState;
     photos: IPhotoState;

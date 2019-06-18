@@ -12,12 +12,18 @@ import PhotoCards from "@components/photos/PhotoCards";
 
 type requestPhotosType = (
     limit: number, offset: number, query?: string, category?: string[],
-    sortAsc?: boolean, widescreen?: boolean
+    sortAsc?: boolean, widescreen?: boolean, owner?: string
 ) => void;
 
 interface IPhotosProps {
     photos: IPhotoState;
     requestApiPhotos: requestPhotosType;
+    getAllByOwner: (
+        limit: number, offset: number, owner: string, query?: string, category?: string[],
+        sortAsc?: boolean, widescreen?: boolean
+    ) => void;
+    ownerId?: string;
+    name?: string;
 }
 
 interface IPhotosState  {
@@ -40,8 +46,12 @@ class Photos extends React.Component<
         return {
             requestApiPhotos: (
                 limit: number, offset: number, query?: string, category?: string[],
+                sortAsc?: boolean, widescreen?: boolean, owner?: string
+            ) => dispatch(getAll(limit, offset, query, category, sortAsc, widescreen, owner)),
+            getAllByOwner: (
+                limit: number, offset: number, owner: string, query?: string, category?: string[],
                 sortAsc?: boolean, widescreen?: boolean
-            ) => dispatch(getAll(limit, offset, query, category, sortAsc, widescreen))
+            ) => dispatch(getAll(limit, offset, query, category, sortAsc, widescreen, owner))
         };
     }
 
@@ -51,7 +61,11 @@ class Photos extends React.Component<
     };
 
     componentDidMount() {
-        this.props.requestApiPhotos(this.state.limit, 0);
+        if (this.props.ownerId) {
+            this.props.getAllByOwner(this.state.limit, 0, this.props.ownerId);
+        } else {
+            this.props.requestApiPhotos(this.state.limit, 0);
+        }
     }
 
     gridPhotosCols = () => {
@@ -75,7 +89,9 @@ class Photos extends React.Component<
     upadatePhotos = (state: IPhotosState) => {
         const { limit, offset } = state;
         const { query, category, sortAsc, widescreen } = this.props.photos;
-        this.props.requestApiPhotos(limit, offset, query, category, sortAsc, widescreen);
+        this.props.requestApiPhotos(
+            limit, offset, query, category, sortAsc, widescreen, this.props.ownerId
+        );
         this.jumpToTop("photos-gallarey");
     }
 
@@ -94,7 +110,9 @@ class Photos extends React.Component<
         return (
             <>
                 <h1 className="heading">
-                    Photos
+                    Photos {this.props.ownerId &&
+                        <span className="text-muted">{this.props.ownerId}</span>
+                    }
                 </h1>
                 <Typography className="body-text" variant="body1" id="photos-gallarey">
                     Here you can see all photos in our database. To see more details about some
@@ -105,6 +123,7 @@ class Photos extends React.Component<
                     limit={limit}
                     apiRequestToPhotos={requestApiPhotos}
                     className="photos__controls"
+                    owner={this.props.ownerId}
                 />
                 <div className="photos">
                     {photoArray && photoArray.length > 0
