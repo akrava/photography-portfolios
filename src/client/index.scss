@@ -181,6 +181,17 @@ html, body {
 
 .about-block__fig {
     float: left;
+
+    @media (max-width: $sm) {
+        float: none;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.about-block__img {
+    margin: 0 auto;
+    display: flex;
 }
 
 .about-block::after {
