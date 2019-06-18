@@ -42,7 +42,7 @@ class Photo {
     ) {
         const filterParamObject: {[k: string]: any} = {};
         if (owner) {
-            filterParamObject.owner_id = owner;
+            filterParamObject.owner_id = new Mongoose.Types.ObjectId(owner);
         }
         if (typeof widescreen !== "undefined") {
             filterParamObject.wide_screen = widescreen;
