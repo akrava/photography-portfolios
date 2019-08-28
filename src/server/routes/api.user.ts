@@ -31,7 +31,7 @@ router.get("/me/ordered-photos", authenticate, async (req, res) => {
     }
     let user;
     try {
-        user = await User.getAllOrderedImages(req.user.id);
+        user = await User.getAllOrderedImages((req.user as User).id);
     } catch (e) {
         res.status(400).send({ err: e.toString() });
         return;
@@ -51,7 +51,7 @@ router.post("/me/ordered-photos/:number(\\d+)", authenticate, async (req, res) =
     let user;
     const number = Number.parseInt(req.params.number, 10);
     try {
-        user = await User.orderPhoto(req.user.id, number);
+        user = await User.orderPhoto((req.user as User).id, number);
     } catch (e) {
         res.status(400).send({ err: e.toString() });
         return;
